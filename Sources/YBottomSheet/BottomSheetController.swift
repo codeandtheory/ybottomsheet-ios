@@ -27,10 +27,10 @@ public class BottomSheetController: UIViewController {
         sheetView.frame.origin.y
     }()
 
-    /// Minimum downward velocity beyond which we interpret a pan gesture as a downward swipe
+    /// Minimum downward velocity beyond which we interpret a pan gesture as a downward swipe.
     public var dismissThresholdVelocity: CGFloat = 1000
 
-    /// Priorities for various non-required constraints
+    /// Priorities for various non-required constraints.
     enum Priorities {
         static let panGesture = UILayoutPriority(775)
         static let sheetContentHugging = UILayoutPriority(751)
@@ -38,7 +38,7 @@ public class BottomSheetController: UIViewController {
         static let sheetCompressionResistanceHigh = UILayoutPriority(800)
     }
 
-    /// Dimmer view
+    /// Dimmer view.
     let dimmerView = UIView()
     /// Bottom sheet view.
     let sheetView: UIView = {
@@ -52,14 +52,14 @@ public class BottomSheetController: UIViewController {
     public private(set) var indicatorView: DragIndicatorView!
     /// Bottom sheet header view.
     public private(set) var headerView: SheetHeaderView!
-    /// Holds the sheet's child content (view or view controller)
+    /// Holds the sheet's child content (view or view controller).
     let contentView: UIView = {
         let view = UIView()
         view.clipsToBounds = true
         return view
     }()
 
-    /// Comprises the indicator view, the header view, and the content view
+    /// Comprises the indicator view, the header view, and the content view.
     private let stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical

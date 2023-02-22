@@ -8,13 +8,13 @@
 
 import UIKit
 
-/// Base class for bottom sheet present and dismiss animators
+/// Base class for bottom sheet present and dismiss animators.
 class BottomSheetAnimator: NSObject {
     /// Bottom sheet controller.
     let sheetViewController: BottomSheetController
     
-    /// Initializes a bottom sheet animator
-    /// - Parameter sheetViewController: Inject bottom sheet controller.
+    /// Initializes a bottom sheet animator.
+    /// - Parameter sheetViewController: the sheet being animated.
     init(sheetViewController: BottomSheetController) {
         self.sheetViewController = sheetViewController
         super.init()

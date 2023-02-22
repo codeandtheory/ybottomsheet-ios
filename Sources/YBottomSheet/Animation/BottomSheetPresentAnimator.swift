@@ -8,7 +8,7 @@
 
 import UIKit
 
-/// Class for present animation.
+/// Performs the sheet present animation.
 class BottomSheetPresentAnimator: BottomSheetAnimator {
     override func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         guard let toViewController = transitionContext.viewController(forKey: .to) else {

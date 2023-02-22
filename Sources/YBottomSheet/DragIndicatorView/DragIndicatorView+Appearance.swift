@@ -22,7 +22,7 @@ extension DragIndicatorView {
         /// Initializes an `Appearance`.
         /// - Parameters:
         ///   - color: drag indicator background color.
-        ///   - layout: `drag indicator layout properties such as drag indicator size, corner radius.
+        ///   - layout: drag indicator layout properties such as drag indicator size, corner radius.
         public init(
             color: UIColor = .tertiaryLabel,
             layout: Layout =  .default

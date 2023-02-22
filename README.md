@@ -98,26 +98,30 @@ public struct Appearance {
     public let elevation: Elevation?
     /// Dimmer view color. Default is 'UIColor.black.withAlphaComponent(0.5)'.
     public let dimmerColor: UIColor?
-    /// Animation duration on bottom sheet. Default is `0.3`
+    /// Animation duration on bottom sheet. Default is `0.3`.
     public let animationDuration: TimeInterval
-    /// Animation type during presenting. Default is `curveEaseIn`
+    /// Animation type during presenting. Default is `curveEaseIn`.
     public let presentAnimationCurve: UIView.AnimationOptions
-    /// Animation type during dismissing. Default is `curveEaseOut`
+    /// Animation type during dismissing. Default is `curveEaseOut`.
     public let dismissAnimationCurve: UIView.AnimationOptions
+    /// (Optional) Minimum content view height. Default is `nil`.
+    ///
+    /// Only applicable for resizable sheets. `nil` means to use the content view's intrinsic height as the minimum.
+    public var minimumContentHeight: CGFloat?
 }
 ```
 
 **Update or customize appearance**
 
 ```swift
-// Declare a resizable sheet
+// Declare a resizable sheet.
 let sheet = BottomSheetController(
     childController: yourViewController,
     appearance: .defaultResizable
 )
 
 // Change corner radius, remove dimmer,
-// and use a shadow instead
+// and use a shadow instead.
 sheet.appearance.layout.cornerRadius = 24
 sheet.appearance.dimmerColor = nil
 sheet.appearance.elevation = Elevation(
@@ -129,7 +133,7 @@ sheet.appearance.elevation = Elevation(
     opacity: 0.4
 )
 
-// Present the sheet
+// Present the sheet.
 present(sheet, animated: true)
 ```
 
