@@ -92,7 +92,7 @@ public struct Appearance {
     public var indicatorAppearance: DragIndicatorView.Appearance?
     /// Appearance of the sheet header view.
     public var headerAppearance: SheetHeaderView.Appearance?
-    /// Bottom sheet layout properties such as corner radius.. Default is `.default`.
+    /// Bottom sheet layout properties such as corner radius. Default is `.default`.
     public let layout: Layout
     /// Bottom sheet's shadow. Default is `nil` (no shadow).
     public let elevation: Elevation?

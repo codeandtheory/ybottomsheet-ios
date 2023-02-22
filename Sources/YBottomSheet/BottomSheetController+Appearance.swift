@@ -16,7 +16,7 @@ extension BottomSheetController {
         public var indicatorAppearance: DragIndicatorView.Appearance?
         /// Appearance of the sheet header view. Default is `.default`.
         public var headerAppearance: SheetHeaderView.Appearance?
-        /// Bottom sheet layout properties such as corner radius.. Default is `.default`.
+        /// Bottom sheet layout properties such as corner radius. Default is `.default`.
         public var layout: Layout
         /// Bottom sheet's shadow. Default is `nil` (no shadow).
         public var elevation: Elevation?
