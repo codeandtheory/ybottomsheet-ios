@@ -22,13 +22,13 @@ extension BottomSheetController {
         public var elevation: Elevation?
         /// Dimmer view color. Default is 'UIColor.black.withAlphaComponent(0.5)'.
         public var dimmerColor: UIColor?
-        /// Animation duration on bottom sheet. Default is `0.3`
+        /// Animation duration on bottom sheet. Default is `0.3`.
         public var animationDuration: TimeInterval
-        /// Animation type during presenting. Default is `curveEaseIn`
+        /// Animation type during presenting. Default is `curveEaseIn`.
         public var presentAnimationCurve: UIView.AnimationOptions
-        /// Animation type during dismissing. Default is `curveEaseOut`
+        /// Animation type during dismissing. Default is `curveEaseOut`.
         public var dismissAnimationCurve: UIView.AnimationOptions
-        /// (Optional) Minimum content view height. Default is `nil`
+        /// (Optional) Minimum content view height. Default is `nil`.
         ///
         /// Only applicable for resizable sheets. `nil` means to use the content view's intrinsic height as the minimum.
         public var minimumContentHeight: CGFloat?

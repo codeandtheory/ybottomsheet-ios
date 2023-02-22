@@ -20,10 +20,10 @@ extension SheetHeaderView {
         /// Header view layout properties such as spacing between views. Default is `.default`.
         public let layout: Layout
         
-        /// Default appearance
+        /// Default appearance.
         public static let `default` = Appearance()
                 
-        /// Initializes an `Appearance`.
+        /// Initializes a sheet header appearance.
         /// - Parameters:
         ///   - title: tuple consisting of `textColor` and `typography` for the title label.
         ///   - closeButtonImage: close button image or pass `nil` to hide the button.

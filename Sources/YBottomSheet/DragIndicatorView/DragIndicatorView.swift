@@ -19,7 +19,7 @@ open class DragIndicatorView: UIView {
         }
     }
     
-    /// :nodoc:
+    /// Returns the size of the drag handle.
     public override var intrinsicContentSize: CGSize {
         appearance.layout.size
     }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-/// Class for dismiss animation.
+/// Performs the sheet dismiss animation.
 class BottomSheetDismissAnimator: BottomSheetAnimator {
     override func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         guard let fromViewController = transitionContext.viewController(forKey: .from),

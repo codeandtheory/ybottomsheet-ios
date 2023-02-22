@@ -16,7 +16,7 @@ extension DragIndicatorView.Appearance {
         /// Size for the drag indicator. Default is {60, 4}.
         public var size: CGSize
         
-        /// Default layout
+        /// Default layout.
         public static var `default` = Layout(cornerRadius: 2.0, size: CGSize(width: 60, height: 4))
         
         /// Initializes a `Layout`.

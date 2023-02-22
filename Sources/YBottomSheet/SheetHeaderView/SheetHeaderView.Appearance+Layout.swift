@@ -17,15 +17,15 @@ extension SheetHeaderView.Appearance {
         /// The minimum required horizontal spacing between title label and message label. Default is `8.0`.
         public let gap: CGFloat
         
-        /// Default sheet header layout
+        /// Default sheet header layout.
         public static let `default` = Layout(
             contentInset: NSDirectionalEdgeInsets(topAndBottom: 0, leadingAndTrailing: 16),
             gap: 8
         )
         
-        /// Initializes a `Layout`.
+        /// Initializes a layout.
         /// - Parameters:
-        ///   - contentInset: custom distance the content is inset from the `HeaderView`.
+        ///   - contentInset: distance the content is inset from the header bounds.
         ///   - gap: horizontal spacing between icon and label.
         public init(
             contentInset: NSDirectionalEdgeInsets,

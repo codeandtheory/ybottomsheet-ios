@@ -14,10 +14,10 @@ extension BottomSheetController.Appearance {
         /// Corner radius of bottom sheet view. Default is `16`.
         public var cornerRadius: CGFloat
         
-        /// Default layout
+        /// Default layout.
         public static let `default` = Layout(cornerRadius: 16)
         
-        /// Initializes a `Layout`.
+        /// Initializes a sheet layout.
         /// - Parameters:
         ///   - cornerRadius: corner radius of bottom sheet view.
         public init(cornerRadius: CGFloat) {

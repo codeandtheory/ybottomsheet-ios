@@ -10,9 +10,11 @@ import UIKit
 import YCoreUI
 import YMatterType
 
-/// Header view for a bottom sheet to show title and close button.
+/// Header view for a bottom sheet to show optional title and optional close button.
+///
+/// (If neither title nor close button are visible, the header will not be shown.)
 open class SheetHeaderView: UIView {
-    /// Appearance for the sheet header (title text and close button)
+    /// Appearance for the sheet header (title text and close button).
     public var appearance: SheetHeaderView.Appearance {
         didSet {
             updateViewAppearance()
@@ -33,8 +35,8 @@ open class SheetHeaderView: UIView {
     
     /// Initializes a sheet header view.
     /// - Parameters:
-    ///   - title: title text
-    ///   - appearance: appearance for the sheet header
+    ///   - title: title text.
+    ///   - appearance: appearance for the sheet header.
     public init(title: String, appearance: Appearance = .default) {
         self.titleLabel.text = title
         self.appearance = appearance
