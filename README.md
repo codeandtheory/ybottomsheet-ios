@@ -1,7 +1,9 @@
-# Y—Bottom Sheet
+![Y—Bottom Sheet](https://user-images.githubusercontent.com/1037520/220544799-9b2e899f-32ba-4629-a819-c7b1f14ad1be.jpeg)
 _An easy-to-use bottom sheet controller for iOS._
 
 This framework offers a bottom sheet view controller that can be initialized to host any view or view controller.
+
+![Bottom Sheet demo animation](https://user-images.githubusercontent.com/1037520/220545009-58ba333c-a367-4bc1-8e6e-5cbdfc9d546f.gif)
 
 Licensing
 ----------
