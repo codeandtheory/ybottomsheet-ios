@@ -1,4 +1,5 @@
 ![Y—Bottom Sheet](https://user-images.githubusercontent.com/1037520/220544799-9b2e899f-32ba-4629-a819-c7b1f14ad1be.jpeg)
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fyml-org%2Fybottomsheet-ios%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/yml-org/ybottomsheet-ios) [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fyml-org%2Fybottomsheet-ios%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/yml-org/ybottomsheet-ios)  
 _An easy-to-use bottom sheet controller for iOS._
 
 This framework offers a bottom sheet view controller that can be initialized to host any view or view controller.
