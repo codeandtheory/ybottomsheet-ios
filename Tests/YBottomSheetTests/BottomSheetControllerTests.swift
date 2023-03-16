@@ -61,7 +61,7 @@ final class BottomSheetControllerTests: XCTestCase {
         XCTAssertFalse(sut.isResizable)
         XCTAssertFalse(sut.hasHeader)
         XCTAssertTrue(sut.headerView.isHidden)
-        XCTAssertTrue(sut.indicatorView.isHidden)
+        XCTAssertTrue(sut.indicatorContainer.isHidden)
         XCTAssertEqual(sut.appearance.layout.cornerRadius, radius)
         XCTAssertEqual(sut.dimmerView.backgroundColor, appearance.dimmerColor)
     }
@@ -127,7 +127,7 @@ final class BottomSheetControllerTests: XCTestCase {
             indicatorAppearance: nil
         )
         
-        XCTAssertTrue(sut.indicatorView.isHidden)
+        XCTAssertTrue(sut.indicatorContainer.isHidden)
         XCTAssertFalse(sut.isResizable)
     }
     

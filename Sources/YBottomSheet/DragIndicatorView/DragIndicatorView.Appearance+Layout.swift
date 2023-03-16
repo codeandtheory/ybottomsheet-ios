@@ -15,20 +15,24 @@ extension DragIndicatorView.Appearance {
         public var cornerRadius: CGFloat
         /// Size for the drag indicator. Default is {60, 4}.
         public var size: CGSize
-        
+        /// Inset of indicator from top of sheet. Default is `8.0`
+        public var topInset: CGFloat
         /// Default layout.
-        public static var `default` = Layout(cornerRadius: 2.0, size: CGSize(width: 60, height: 4))
+        public static var `default` = Layout()
         
         /// Initializes a `Layout`.
         /// - Parameters:
         ///   - cornerRadius: corner radius of drag indicator.
         ///   - size: size for the drag indicator.
+        ///   - topInset: inset of indicator from top of sheet.
         public init(
-            cornerRadius: CGFloat,
-            size: CGSize
+            cornerRadius: CGFloat = 2,
+            size: CGSize = CGSize(width: 60, height: 4),
+            topInset: CGFloat = 8
         ) {
             self.cornerRadius = cornerRadius
             self.size = size
+            self.topInset = topInset
         }
     }
 }
