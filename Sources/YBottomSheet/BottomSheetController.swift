@@ -21,6 +21,7 @@ public class BottomSheetController: UIViewController {
     private let minimumTopOffset: CGFloat = 44
     private let minimumContentHeight: CGFloat = 88
     private var topAnchor: NSLayoutConstraint?
+    private var indicatorTopAnchor: NSLayoutConstraint?
     private var childHeightAnchor: NSLayoutConstraint?
     private var panGesture: UIPanGestureRecognizer?
     internal lazy var lastYOffset: CGFloat = {
@@ -50,6 +51,8 @@ public class BottomSheetController: UIViewController {
     }()
     /// Bottom sheet drag indicator view.
     public private(set) var indicatorView: DragIndicatorView!
+    /// Container view for the drag indicator.
+    internal let indicatorContainer = UIView()
     /// Bottom sheet header view.
     public private(set) var headerView: SheetHeaderView!
     /// Holds the sheet's child content (view or view controller).
@@ -167,6 +170,8 @@ private extension BottomSheetController {
         contentView.addSubview(subview)
         subview.constrainEdges()
         indicatorView = DragIndicatorView(appearance: appearance.indicatorAppearance ?? .default)
+        indicatorContainer.addSubview(indicatorView)
+
         headerView = SheetHeaderView(title: title, appearance: appearance.headerAppearance ?? .default)
         headerView.delegate = self
         buildSheet()
@@ -190,7 +195,7 @@ private extension BottomSheetController {
         view.addSubview(dimmerView)
         view.addSubview(sheetView)
         sheetView.addSubview(stackView)
-        stackView.addArrangedSubview(indicatorView)
+        stackView.addArrangedSubview(indicatorContainer)
         stackView.addArrangedSubview(headerView)
         stackView.addArrangedSubview(contentView)
     }
@@ -206,11 +211,14 @@ private extension BottomSheetController {
             constant: minimumTopOffset
         )
 
-        stackView.constrain(
+        indicatorView.constrain(.bottomAnchor, to: indicatorContainer.bottomAnchor)
+        indicatorTopAnchor = indicatorView.constrain(
             .topAnchor,
-            to: sheetView.topAnchor,
-            constant: appearance.layout.cornerRadius - (appearance.indicatorAppearance?.layout.size.height ?? 0)
+            to: indicatorContainer.topAnchor
         )
+        indicatorView.constrainCenter(.x)
+
+        stackView.constrain(.topAnchor, to: sheetView.topAnchor)
         stackView.constrainEdges(.horizontal, to: view.safeAreaLayoutGuide)
         stackView.constrainEdges(.bottom, to: view.safeAreaLayoutGuide, relatedBy: .greaterThanOrEqual)
         stackView.constrainEdges(.bottom, to: view.safeAreaLayoutGuide, priority: Priorities.sheetContentHugging)
@@ -230,9 +238,10 @@ private extension BottomSheetController {
     }
     
     func updateIndicatorView() {
-        indicatorView.isHidden = !isResizable
+        indicatorContainer.isHidden = !isResizable
         if let indicatorAppearance = appearance.indicatorAppearance {
             indicatorView.appearance = indicatorAppearance
+            indicatorTopAnchor?.constant = indicatorAppearance.layout.topInset
             if panGesture == nil {
                 let pan = UIPanGestureRecognizer()
                 pan.addTarget(self, action: #selector(handlePan))

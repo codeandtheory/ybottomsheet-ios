@@ -22,16 +22,18 @@ final class DragIndicatorViewTests: XCTestCase {
         XCTAssertEqual(sut.appearance.color, .tertiaryLabel)
         XCTAssertEqual(sut.appearance.layout.cornerRadius, 2)
         XCTAssertEqual(sut.appearance.layout.size, CGSize(width: 60, height: 4))
+        XCTAssertEqual(sut.appearance.layout.topInset, 8)
         XCTAssertEqual(sut.intrinsicContentSize, CGSize(width: 60, height: 4))
     }
     
-    func test_init_withRandomValues() {
+    func test_init_withCustomValues() {
         let size = CGSize(width: 100, height: 20)
         let appearance = DragIndicatorView.Appearance(
             color: .red,
             layout: DragIndicatorView.Appearance.Layout(
                 cornerRadius: 10,
-                size: size
+                size: size,
+                topInset: 12
             )
         )
         let sut = makeSUT(appearance: appearance)
@@ -39,6 +41,7 @@ final class DragIndicatorViewTests: XCTestCase {
         XCTAssertEqual(sut.appearance.color, .red)
         XCTAssertEqual(sut.appearance.layout.cornerRadius, 10)
         XCTAssertEqual(sut.appearance.layout.size, size)
+        XCTAssertEqual(sut.appearance.layout.topInset, 12)
         XCTAssertEqual(sut.intrinsicContentSize, size)
     }
     
@@ -57,16 +60,18 @@ final class DragIndicatorViewTests: XCTestCase {
         let sut = makeSUT()
         let size = CGSize(width: 100, height: 8)
         let radius: CGFloat = 4
+        let topInset: CGFloat = 10
 
         XCTAssertNotEqual(sut.appearance.layout.cornerRadius, radius)
         XCTAssertNotEqual(sut.appearance.layout.size, size)
 
         sut.appearance = DragIndicatorView.Appearance(
-            layout: DragIndicatorView.Appearance.Layout(cornerRadius: radius, size: size)
+            layout: DragIndicatorView.Appearance.Layout(cornerRadius: radius, size: size, topInset: 10)
         )
 
         XCTAssertEqual(sut.appearance.layout.cornerRadius, radius)
         XCTAssertEqual(sut.appearance.layout.size, size)
+        XCTAssertEqual(sut.appearance.layout.topInset, topInset)
     }
 }
 
