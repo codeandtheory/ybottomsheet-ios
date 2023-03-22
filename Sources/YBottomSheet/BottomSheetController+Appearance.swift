@@ -32,9 +32,11 @@ extension BottomSheetController {
         ///
         /// Only applicable for resizable sheets. `nil` means to use the content view's intrinsic height as the minimum.
         public var minimumContentHeight: CGFloat?
-        /// Whether the sheet is dismissible or not. Default is `true`.
-        public var allowDismiss: Bool
-
+        /// Whether the sheet can be dismissed by swiping down or tapping on the dimmer. Default is `true`.
+        ///
+        /// The user can always dismiss the sheet from the close button if it is visible.
+        public var isDismissAllowed: Bool
+        
         /// Default appearance (fixed size sheet)
         public static let `default` = Appearance()
         /// Default appearance for a resizable sheet
@@ -51,7 +53,7 @@ extension BottomSheetController {
         ///   - presentAnimationCurve: Animaiton during presenting.
         ///   - dismissAnimationCurve: Animation during dismiss.
         ///   - minimumContentHeight: Optional) Minimum content view height.
-        ///   - allowDismiss: Whether the sheet is dismissible or not.
+        ///   - isDismissAllowed: Whether the sheet can be dismissed by swiping down or tapping on the dimmer.
         public init(
             indicatorAppearance: DragIndicatorView.Appearance? = nil,
             headerAppearance: SheetHeaderView.Appearance? = .default,
@@ -62,7 +64,7 @@ extension BottomSheetController {
             presentAnimationCurve: UIView.AnimationOptions = .curveEaseIn,
             dismissAnimationCurve: UIView.AnimationOptions = .curveEaseOut,
             minimumContentHeight: CGFloat? = nil,
-            allowDismiss: Bool = true
+            isDismissAllowed: Bool = true
         ) {
             self.indicatorAppearance = indicatorAppearance
             self.headerAppearance = headerAppearance
@@ -73,7 +75,7 @@ extension BottomSheetController {
             self.presentAnimationCurve = presentAnimationCurve
             self.dismissAnimationCurve = dismissAnimationCurve
             self.minimumContentHeight = minimumContentHeight
-            self.allowDismiss = allowDismiss
+            self.isDismissAllowed = isDismissAllowed
         }
     }
 }
