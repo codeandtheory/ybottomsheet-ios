@@ -9,5 +9,5 @@
 import Foundation
 
 internal protocol SheetHeaderViewDelegate: AnyObject {
-    func didDismiss()
+    func didCloseTapped()
 }

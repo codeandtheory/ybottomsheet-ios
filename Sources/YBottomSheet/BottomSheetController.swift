@@ -149,6 +149,14 @@ public class BottomSheetController: UIViewController {
         didDismiss()
         return true
     }
+    
+    /// Dismiss bottom sheet.
+    /// - Parameter isCloseButton: whether close button is tapped or not.
+    func didDismiss(isCloseButton: Bool = false) {
+        if appearance.allowDismiss || isCloseButton {
+            onDismiss()
+        }
+    }
 }
 
 private extension BottomSheetController {
@@ -308,8 +316,8 @@ private extension BottomSheetController {
 
 extension BottomSheetController: SheetHeaderViewDelegate {
     @objc
-    func didDismiss() {
-        onDismiss()
+    func didCloseTapped() {
+        didDismiss(isCloseButton: true)
     }
 }
 
@@ -352,24 +360,6 @@ private extension BottomSheetController {
     }
 }
 
-extension BottomSheetController: UIViewControllerTransitioningDelegate {
-    /// Returns the animator for presenting a bottom sheet
-    public func animationController(
-        forPresented presented: UIViewController,
-        presenting: UIViewController,
-        source: UIViewController
-    ) -> UIViewControllerAnimatedTransitioning? {
-        BottomSheetPresentAnimator(sheetViewController: self)
-    }
-    
-    /// Returns the animator for dismissing a bottom sheet
-    public func animationController(
-        forDismissed dismissed: UIViewController
-    ) -> UIViewControllerAnimatedTransitioning? {
-        BottomSheetDismissAnimator(sheetViewController: self)
-    }
-}
-
 // Methods for unit testing
 internal extension BottomSheetController {
     @objc
@@ -392,6 +382,6 @@ internal extension BottomSheetController {
 
     @objc
     func simulateDismiss() {
-        didDismiss()
+        didCloseTapped()
     }
 }

@@ -51,7 +51,7 @@ open class SheetHeaderView: UIView {
     required public init?(coder: NSCoder) { nil }
     
     @objc private func closeButtonAction() {
-        delegate?.didDismiss()
+        delegate?.didCloseTapped()
     }
     
     // For unit testing

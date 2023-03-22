@@ -130,40 +130,6 @@ final class BottomSheetControllerTests: XCTestCase {
         XCTAssertTrue(sut.indicatorContainer.isHidden)
         XCTAssertFalse(sut.isResizable)
     }
-    
-    func test_onDimmer() {
-        let sut = SpyBottomSheetController(title: "", childView: UIView())
-        
-        XCTAssertFalse(sut.onDimmerTapped)
-        XCTAssertFalse(sut.isDismissed)
-
-        sut.simulateOnDimmerTap()
-        
-        XCTAssertTrue(sut.onDimmerTapped)
-        XCTAssertTrue(sut.isDismissed)
-    }
-    
-    func test_onSwipeDown() {
-        let sut = SpyBottomSheetController(title: "", childView: UIView())
-        
-        XCTAssertFalse(sut.onSwipeDown)
-        XCTAssertFalse(sut.isDismissed)
-
-        sut.simulateOnSwipeDown()
-        
-        XCTAssertTrue(sut.onSwipeDown)
-        XCTAssertTrue(sut.isDismissed)
-    }
-    
-    func test_onDidDismiss() {
-        let sut = SpyBottomSheetController(title: "", childView: UIView())
-        
-        XCTAssertFalse(sut.isDismissed)
-        
-        sut.simulateDismiss()
-        
-        XCTAssertTrue(sut.isDismissed)
-    }
 
     func test_dragging_worksIfResizable() {
         let sut = SpyBottomSheetController(title: "", childView: ChildView(), appearance: .defaultResizable)
@@ -324,6 +290,56 @@ final class BottomSheetControllerTests: XCTestCase {
     }
 }
 
+extension BottomSheetControllerTests {
+    func test_onDimmer() {
+        let sut = SpyBottomSheetController(title: "", childView: UIView())
+        
+        XCTAssertFalse(sut.onDimmerTapped)
+        XCTAssertFalse(sut.isDismissed)
+
+        sut.simulateOnDimmerTap()
+        
+        XCTAssertTrue(sut.onDimmerTapped)
+        XCTAssertTrue(sut.isDismissed)
+    }
+    
+    func test_onSwipeDown() {
+        let sut = SpyBottomSheetController(title: "", childView: UIView())
+        
+        XCTAssertFalse(sut.onSwipeDown)
+        XCTAssertFalse(sut.isDismissed)
+
+        sut.simulateOnSwipeDown()
+        
+        XCTAssertTrue(sut.onSwipeDown)
+        XCTAssertTrue(sut.isDismissed)
+    }
+    
+    func test_onDidDismiss() {
+        let sut = SpyBottomSheetController(title: "", childView: UIView())
+        
+        XCTAssertFalse(sut.isDismissed)
+        
+        sut.simulateDismiss()
+        
+        XCTAssertTrue(sut.isDismissed)
+    }
+    
+    func test_forbidDismiss() {
+        let sut = SpyBottomSheetController(title: "", childView: UIView())
+        sut.appearance.allowDismiss = false
+        
+        XCTAssertFalse(sut.onSwipeDown)
+        XCTAssertFalse(sut.onDimmerTapped)
+        
+        sut.simulateOnDimmerTap()
+        sut.simulateOnSwipeDown()
+        
+        XCTAssertFalse(sut.onSwipeDown)
+        XCTAssertFalse(sut.onDimmerTapped)
+    }
+}
+
 private extension BottomSheetControllerTests {
     func makeSUT(
         viewController: UIViewController,
@@ -368,19 +384,25 @@ final class SpyBottomSheetController: BottomSheetController {
     var onDimmerTapped = false
     var onDragging = false
 
-    override func didDismiss() {
+    override func didDismiss(isCloseButton: Bool) {
         super.didDismiss()
-        isDismissed = true
+        if isCloseButton || appearance.allowDismiss {
+            isDismissed = true
+        }
     }
 
     override func simulateOnSwipeDown() {
         super.simulateOnSwipeDown()
-        onSwipeDown = true
+        if appearance.allowDismiss {
+            onSwipeDown = true
+        }
     }
 
     override func simulateOnDimmerTap() {
         super.simulateOnDimmerTap()
-        onDimmerTapped = true
+        if appearance.allowDismiss {
+            onDimmerTapped = true
+        }
     }
 
     @discardableResult
