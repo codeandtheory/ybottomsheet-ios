@@ -32,7 +32,9 @@ extension BottomSheetController {
         ///
         /// Only applicable for resizable sheets. `nil` means to use the content view's intrinsic height as the minimum.
         public var minimumContentHeight: CGFloat?
-        
+        /// Whether the sheet is dismissible or not. Default is `true`.
+        public var allowDismiss: Bool
+
         /// Default appearance (fixed size sheet)
         public static let `default` = Appearance()
         /// Default appearance for a resizable sheet
@@ -49,6 +51,7 @@ extension BottomSheetController {
         ///   - presentAnimationCurve: Animaiton during presenting.
         ///   - dismissAnimationCurve: Animation during dismiss.
         ///   - minimumContentHeight: Optional) Minimum content view height.
+        ///   - allowDismiss: Whether the sheet is dismissible or not.
         public init(
             indicatorAppearance: DragIndicatorView.Appearance? = nil,
             headerAppearance: SheetHeaderView.Appearance? = .default,
@@ -58,7 +61,8 @@ extension BottomSheetController {
             animationDuration: TimeInterval = 0.3,
             presentAnimationCurve: UIView.AnimationOptions = .curveEaseIn,
             dismissAnimationCurve: UIView.AnimationOptions = .curveEaseOut,
-            minimumContentHeight: CGFloat? = nil
+            minimumContentHeight: CGFloat? = nil,
+            allowDismiss: Bool = true
         ) {
             self.indicatorAppearance = indicatorAppearance
             self.headerAppearance = headerAppearance
@@ -69,6 +73,7 @@ extension BottomSheetController {
             self.presentAnimationCurve = presentAnimationCurve
             self.dismissAnimationCurve = dismissAnimationCurve
             self.minimumContentHeight = minimumContentHeight
+            self.allowDismiss = allowDismiss
         }
     }
 }
