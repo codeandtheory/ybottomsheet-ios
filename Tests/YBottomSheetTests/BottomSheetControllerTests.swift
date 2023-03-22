@@ -314,12 +314,12 @@ final class BottomSheetControllerTests: XCTestCase {
         XCTAssertTrue(sut.isDismissed)
     }
     
-    func test_onDidDismiss() {
+    func test_dismissOnCloseButtonTapped() {
         let sut = SpyBottomSheetController(title: "", childView: UIView())
         
         XCTAssertFalse(sut.isDismissed)
         
-        sut.simulateDismiss()
+        sut.simulateTapCloseButton()
         
         XCTAssertTrue(sut.isDismissed)
     }
@@ -334,10 +334,14 @@ final class BottomSheetControllerTests: XCTestCase {
         
         sut.simulateOnDimmerTap()
         sut.simulateOnSwipeDown()
+        _ = sut.accessibilityPerformEscape()
         
         XCTAssertFalse(sut.onSwipeDown)
         XCTAssertFalse(sut.onDimmerTapped)
-        XCTAssertFalse(sut.isDismissed)
+        
+        // tap close button always dismisses
+        sut.simulateTapCloseButton()
+        XCTAssertTrue(sut.isDismissed)
     }
 }
 
@@ -385,8 +389,8 @@ final class SpyBottomSheetController: BottomSheetController {
     var onDimmerTapped = false
     var onDragging = false
     
-    override func simulateDismiss() {
-        super.simulateDismiss()
+    override func simulateTapCloseButton() {
+        super.simulateTapCloseButton()
         isDismissed = true
     }
 

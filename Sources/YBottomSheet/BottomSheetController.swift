@@ -383,7 +383,7 @@ internal extension BottomSheetController {
     }
 
     @objc
-    func simulateDismiss() {
+    func simulateTapCloseButton() {
         didTapCloseButton()
     }
 }
