@@ -13,6 +13,7 @@ import YMatterType
 
 // OK to have lots of test cases
 // swiftlint:disable file_length
+// swiftlint:disable type_body_length
 
 final class BottomSheetControllerTests: XCTestCase {
     var window: UIWindow!
@@ -288,9 +289,7 @@ final class BottomSheetControllerTests: XCTestCase {
         let sut = makeSUT(viewController: UINavigationController(rootViewController: UIViewController()))
         XCTAssertFalse(sut.hasHeader)
     }
-}
 
-extension BottomSheetControllerTests {
     func test_onDimmer() {
         let sut = SpyBottomSheetController(title: "", childView: UIView())
         
@@ -327,16 +326,18 @@ extension BottomSheetControllerTests {
     
     func test_forbidDismiss() {
         let sut = SpyBottomSheetController(title: "", childView: UIView())
-        sut.appearance.allowDismiss = false
+        sut.appearance.isDismissAllowed = false
         
         XCTAssertFalse(sut.onSwipeDown)
         XCTAssertFalse(sut.onDimmerTapped)
+        XCTAssertFalse(sut.isDismissed)
         
         sut.simulateOnDimmerTap()
         sut.simulateOnSwipeDown()
         
         XCTAssertFalse(sut.onSwipeDown)
         XCTAssertFalse(sut.onDimmerTapped)
+        XCTAssertFalse(sut.isDismissed)
     }
 }
 
@@ -383,24 +384,29 @@ final class SpyBottomSheetController: BottomSheetController {
     var onSwipeDown = false
     var onDimmerTapped = false
     var onDragging = false
+    
+    override func simulateDismiss() {
+        super.simulateDismiss()
+        isDismissed = true
+    }
 
-    override func didDismiss(isCloseButton: Bool) {
+    override func didDismiss() {
         super.didDismiss()
-        if isCloseButton || appearance.allowDismiss {
+        if appearance.isDismissAllowed {
             isDismissed = true
         }
     }
 
     override func simulateOnSwipeDown() {
         super.simulateOnSwipeDown()
-        if appearance.allowDismiss {
+        if appearance.isDismissAllowed {
             onSwipeDown = true
         }
     }
 
     override func simulateOnDimmerTap() {
         super.simulateOnDimmerTap()
-        if appearance.allowDismiss {
+        if appearance.isDismissAllowed {
             onDimmerTapped = true
         }
     }

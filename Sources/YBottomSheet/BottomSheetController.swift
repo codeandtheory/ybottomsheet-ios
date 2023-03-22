@@ -150,10 +150,11 @@ public class BottomSheetController: UIViewController {
         return true
     }
     
-    /// Dismiss bottom sheet.
-    /// - Parameter isCloseButton: whether close button is tapped or not.
-    func didDismiss(isCloseButton: Bool = false) {
-        if appearance.allowDismiss || isCloseButton {
+    /// Dismisses the bottom sheet if allowed.
+    ///
+    /// This method is not called when the header's close button is tapped.
+    func didDismiss() {
+        if appearance.isDismissAllowed {
             onDismiss()
         }
     }
@@ -316,8 +317,9 @@ private extension BottomSheetController {
 
 extension BottomSheetController: SheetHeaderViewDelegate {
     @objc
-    func didCloseTapped() {
-        didDismiss(isCloseButton: true)
+    func didTapCloseButton() {
+        // Directly dismiss the sheet without considering `isDismissAllowed`.
+        onDismiss()
     }
 }
 
@@ -382,6 +384,6 @@ internal extension BottomSheetController {
 
     @objc
     func simulateDismiss() {
-        didCloseTapped()
+        didTapCloseButton()
     }
 }

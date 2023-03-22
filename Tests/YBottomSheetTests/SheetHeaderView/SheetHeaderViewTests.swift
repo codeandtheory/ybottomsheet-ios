@@ -91,7 +91,7 @@ private extension SheetHeaderViewTests {
 }
 
 extension SheetHeaderViewTests: SheetHeaderViewDelegate {
-    func didCloseTapped() {
+    func didTapCloseButton() {
         isDismissed = true
     }
 }
