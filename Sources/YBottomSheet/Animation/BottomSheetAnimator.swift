@@ -13,6 +13,13 @@ class BottomSheetAnimator: NSObject {
     /// Bottom sheet controller.
     let sheetViewController: BottomSheetController
     
+    /// Accessibility reduce motion is enabled or not.
+    var isReduceMotionEnabled: Bool {
+        get {
+            UIAccessibility.isReduceMotionEnabled
+        }
+    }
+    
     /// Initializes a bottom sheet animator.
     /// - Parameter sheetViewController: the sheet being animated.
     init(sheetViewController: BottomSheetController) {

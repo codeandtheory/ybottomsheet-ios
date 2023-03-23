@@ -21,11 +21,13 @@ class BottomSheetPresentAnimator: BottomSheetAnimator {
         sheet.view.layoutSubviews()
         sheet.dimmerView.alpha = 0
         
-        let toFinalFrame = transitionContext.finalFrame(for: toViewController)
-        var sheetFrame = sheet.sheetView.frame
-        sheetFrame.origin.y = toFinalFrame.maxY + (sheet.appearance.elevation?.extent.top ?? 0)
-        sheet.sheetView.frame = sheetFrame
-        sheet.view.setNeedsLayout()
+        if !isReduceMotionEnabled {
+            let toFinalFrame = transitionContext.finalFrame(for: toViewController)
+            var sheetFrame = sheet.sheetView.frame
+            sheetFrame.origin.y = toFinalFrame.maxY + (sheet.appearance.elevation?.extent.top ?? 0)
+            sheet.sheetView.frame = sheetFrame
+            sheet.view.setNeedsLayout()
+        }
         
         let duration = transitionDuration(using: transitionContext)
         

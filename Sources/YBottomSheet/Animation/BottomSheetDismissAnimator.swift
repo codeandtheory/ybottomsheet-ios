@@ -37,7 +37,9 @@ class BottomSheetDismissAnimator: BottomSheetAnimator {
             delay: .zero,
             options: [.beginFromCurrentState, sheet.appearance.dismissAnimationCurve]
         ) {
-            sheet.sheetView.frame = sheetFrame
+            if !self.isReduceMotionEnabled {
+                sheet.sheetView.frame = sheetFrame
+            }
         } completion: { _ in
             if !transitionContext.transitionWasCancelled {
                 fromViewController.view.removeFromSuperview()
