@@ -37,7 +37,9 @@ class BottomSheetDismissAnimator: BottomSheetAnimator {
             delay: .zero,
             options: [.beginFromCurrentState, sheet.appearance.dismissAnimationCurve]
         ) {
-            if !self.isReduceMotionEnabled {
+            if self.isReduceMotionEnabled {
+                sheet.sheetView.alpha = 0
+            } else {
                 sheet.sheetView.frame = sheetFrame
             }
         } completion: { _ in

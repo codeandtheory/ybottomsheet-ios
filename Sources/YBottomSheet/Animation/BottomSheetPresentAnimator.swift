@@ -21,7 +21,9 @@ class BottomSheetPresentAnimator: BottomSheetAnimator {
         sheet.view.layoutSubviews()
         sheet.dimmerView.alpha = 0
         
-        if !isReduceMotionEnabled {
+        if isReduceMotionEnabled {
+            sheet.sheetView.alpha = 0
+        } else {
             let toFinalFrame = transitionContext.finalFrame(for: toViewController)
             var sheetFrame = sheet.sheetView.frame
             sheetFrame.origin.y = toFinalFrame.maxY + (sheet.appearance.elevation?.extent.top ?? 0)
@@ -44,7 +46,11 @@ class BottomSheetPresentAnimator: BottomSheetAnimator {
             delay: .zero,
             options: [.beginFromCurrentState, sheet.appearance.presentAnimationCurve]
         ) {
-            sheet.view.layoutIfNeeded()
+            if self.isReduceMotionEnabled {
+                sheet.sheetView.alpha = 1
+            } else {
+                sheet.view.layoutIfNeeded()
+            }
         } completion: { _ in
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         }

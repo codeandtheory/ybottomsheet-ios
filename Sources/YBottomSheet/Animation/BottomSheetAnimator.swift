@@ -15,9 +15,7 @@ class BottomSheetAnimator: NSObject {
     
     /// Accessibility reduce motion is enabled or not.
     var isReduceMotionEnabled: Bool {
-        get {
-            UIAccessibility.isReduceMotionEnabled
-        }
+        UIAccessibility.isReduceMotionEnabled
     }
     
     /// Initializes a bottom sheet animator.
