@@ -12,10 +12,16 @@ import UIKit
 class BottomSheetAnimator: NSObject {
     /// Bottom sheet controller.
     let sheetViewController: BottomSheetController
-    
+
+    /// Override for isReduceMotionEnabled. Default is `nil`.
+    ///
+    /// For unit testing. When non-`nil` it will be returned instead of
+    /// `UIAccessibility.isReduceMotionEnabled`,
+    var reduceMotionOverride: Bool?
+
     /// Accessibility reduce motion is enabled or not.
     var isReduceMotionEnabled: Bool {
-        UIAccessibility.isReduceMotionEnabled
+        reduceMotionOverride ?? UIAccessibility.isReduceMotionEnabled
     }
     
     /// Initializes a bottom sheet animator.
