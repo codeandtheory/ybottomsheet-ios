@@ -343,6 +343,51 @@ final class BottomSheetControllerTests: XCTestCase {
         sut.simulateTapCloseButton()
         XCTAssertTrue(sut.isDismissed)
     }
+
+    func test_backgroundColor_copiedFromChild() {
+        let color: UIColor = .systemPurple
+        let view = UIView()
+        view.backgroundColor = color
+        let sut = makeSUT(view: view)
+        let traits = UITraitCollection(preferredContentSizeCategory: .large)
+        XCTAssertNotNil(view.backgroundColor)
+
+        sut.loadViewIfNeeded()
+
+        XCTAssertEqual(
+            sut.sheetView.backgroundColor?.resolvedColor(with: traits),
+            color.resolvedColor(with: traits)
+        )
+        XCTAssertNil(view.backgroundColor)
+    }
+
+    func test_clearBackgroundColor_notCopiedFromChild() {
+        let view = UIView()
+        view.backgroundColor = .clear
+        let sut = makeSUT(view: view)
+        let traits = UITraitCollection(preferredContentSizeCategory: .large)
+
+        sut.loadViewIfNeeded()
+
+        XCTAssertEqual(
+            sut.sheetView.backgroundColor?.resolvedColor(with: traits),
+            UIColor.systemBackground.resolvedColor(with: traits)
+        )
+    }
+
+    func test_nilBackgroundColor_notCopiedFromChild() {
+        let view = UIView()
+        view.backgroundColor = nil
+        let sut = makeSUT(view: view)
+        let traits = UITraitCollection(preferredContentSizeCategory: .large)
+
+        sut.loadViewIfNeeded()
+
+        XCTAssertEqual(
+            sut.sheetView.backgroundColor?.resolvedColor(with: traits),
+            UIColor.systemBackground.resolvedColor(with: traits)
+        )
+    }
 }
 
 private extension BottomSheetControllerTests {
