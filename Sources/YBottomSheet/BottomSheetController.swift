@@ -46,7 +46,6 @@ public class BottomSheetController: UIViewController {
         let view = UIView()
         view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         view.backgroundColor = .systemBackground
-        view.backgroundColor = .systemBackground
         return view
     }()
     /// Bottom sheet drag indicator view.
@@ -178,6 +177,16 @@ private extension BottomSheetController {
     func build(_ subview: UIView, title: String) {
         contentView.addSubview(subview)
         subview.constrainEdges()
+
+        if let backgroundColor = subview.backgroundColor,
+           backgroundColor.rgbaComponents.alpha == 1 {
+            // use the subview's background color for the sheet
+            sheetView.backgroundColor = backgroundColor
+            // but we have to set the subview's background to nil or else
+            // it will overflow the sheet and not be cropped by the corner radius.
+            subview.backgroundColor = nil
+        }
+
         indicatorView = DragIndicatorView(appearance: appearance.indicatorAppearance ?? .default)
         indicatorContainer.addSubview(indicatorView)
 
