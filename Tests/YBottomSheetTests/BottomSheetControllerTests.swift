@@ -12,8 +12,7 @@ import YMatterType
 @testable import YBottomSheet
 
 // OK to have lots of test cases
-// swiftlint:disable file_length
-// swiftlint:disable type_body_length
+// swiftlint:disable file_length type_body_length
 
 final class BottomSheetControllerTests: XCTestCase {
     var window: UIWindow!
@@ -486,3 +485,4 @@ final class MockPanGesture: UIPanGestureRecognizer {
     override func translation(in view: UIView?) -> CGPoint { translation }
     override func velocity(in view: UIView?) -> CGPoint { velocity }
 }
+// swiftlint:enable file_length type_body_length
