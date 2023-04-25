@@ -19,9 +19,7 @@ public class BottomSheetController: UIViewController {
     private var indicatorTopAnchor: NSLayoutConstraint?
     private var childHeightAnchor: NSLayoutConstraint?
     private var panGesture: UIPanGestureRecognizer?
-    internal lazy var lastYOffset: CGFloat = {
-        sheetView.frame.origin.y
-    }()
+    internal lazy var lastYOffset: CGFloat = { sheetView.frame.origin.y }()
 
     /// Minimum downward velocity beyond which we interpret a pan gesture as a downward swipe.
     public var dismissThresholdVelocity: CGFloat = 1000
@@ -128,7 +126,14 @@ public class BottomSheetController: UIViewController {
         super.viewDidLoad()
         build()
     }
-    
+
+    /// :nodoc:
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        // set initial VO focus to the sheet not the dimmer
+        UIAccessibility.post(notification: .screenChanged, argument: sheetView)
+    }
+
     /// :nodoc:
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -199,7 +204,6 @@ private extension BottomSheetController {
     func buildSheet() {
         buildViews()
         buildConstraints()
-        view.layoutIfNeeded()
         updateViewAppearance()
         addGestures()
     }
@@ -343,7 +347,7 @@ private extension BottomSheetController {
     }
 
     @objc
-    private func handlePan(_ gesture: UIPanGestureRecognizer) {
+    func handlePan(_ gesture: UIPanGestureRecognizer) {
         switch gesture.state {
         case .began, .changed:
             let translation = gesture.translation(in: sheetView)
@@ -382,8 +386,7 @@ internal extension BottomSheetController {
         onDimmerTap(sender: UITapGestureRecognizer())
     }
 
-    @objc
-    @discardableResult
+    @objc @discardableResult
     func simulateDragging(_ gesture: UIPanGestureRecognizer) -> Bool {
         guard isResizable else { return false }
         handlePan(gesture)

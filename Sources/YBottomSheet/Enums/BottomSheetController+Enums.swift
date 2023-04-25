@@ -17,7 +17,8 @@ internal extension BottomSheetController {
         static let sheetCompressionResistanceLow = UILayoutPriority.defaultLow
         static let sheetCompressionResistanceHigh = UILayoutPriority(800)
     }
-    
+
+    /// Types of content that can populate a bottom sheet
     enum Content {
         case view(title: String, view: UIView)
         case controller(_: UIViewController)
