@@ -1,5 +1,5 @@
 //
-//  YBottomSheet+Strings.swift
+//  BottomSheetController+Strings.swift
 //  YBottomSheet
 //
 //  Created by Dev Karan on 15/02/23.
