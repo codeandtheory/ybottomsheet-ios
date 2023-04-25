@@ -38,7 +38,14 @@ public class BottomSheetController: UIViewController {
         static let sheetCompressionResistanceLow = UILayoutPriority.defaultLow
         static let sheetCompressionResistanceHigh = UILayoutPriority(800)
     }
-
+    /// Dimmer tap view
+    let dimmerTapView: UIView = {
+        let view = UIView()
+        view.accessibilityTraits = .button
+        view.accessibilityLabel = BottomSheetController.Strings.closeButton.localized
+        view.accessibilityIdentifier = AccessibilityIdentifiers.dimmerId
+        return view
+    }()
     /// Dimmer view.
     let dimmerView = UIView()
     /// Bottom sheet view.
@@ -211,6 +218,7 @@ private extension BottomSheetController {
 
     func buildViews() {
         view.addSubview(dimmerView)
+        view.addSubview(dimmerTapView)
         view.addSubview(sheetView)
         sheetView.addSubview(stackView)
         stackView.addArrangedSubview(indicatorContainer)
@@ -220,6 +228,8 @@ private extension BottomSheetController {
 
     func buildConstraints() {
         dimmerView.constrainEdges()
+        dimmerTapView.constrainEdges(.notBottom)
+        dimmerTapView.constrain(.bottomAnchor, to: sheetView.topAnchor)
         sheetView.constrainEdges(.notTop)
 
         sheetView.constrain(
@@ -316,7 +326,7 @@ private extension BottomSheetController {
         swipeGesture.direction = .down
         view.addGestureRecognizer(swipeGesture)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onDimmerTap))
-        dimmerView.addGestureRecognizer(tapGesture)
+        dimmerTapView.addGestureRecognizer(tapGesture)
     }
 
     func onDismiss() {
