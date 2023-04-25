@@ -17,7 +17,7 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/yml-org/YCoreUI.git",
-            from: "1.5.0"
+            from: "1.7.0"
         ),
         .package(
             url: "https://github.com/yml-org/YMatterType.git",
