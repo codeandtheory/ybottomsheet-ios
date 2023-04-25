@@ -82,9 +82,11 @@ public class BottomSheetController: UIViewController {
     /// `UINavigationController` and hence already has its own `UINavigationBar` header.
     public var hasHeader: Bool {
         guard appearance.headerAppearance != nil else { return false }
+
         if case let .controller(childController) = content {
             return !(childController is UINavigationController)
         }
+
         return true
     }
 
@@ -147,7 +149,7 @@ public class BottomSheetController: UIViewController {
     /// This method is not called when the header's close button is tapped.
     func didDismiss() {
         if appearance.isDismissAllowed {
-            dismiss(animated: true)
+            onDismiss()
         }
     }
 }
@@ -242,6 +244,7 @@ private extension BottomSheetController {
     }
 
     func updateViewAppearance() {
+        dimmerTapView.isAccessibilityElement = appearance.isDismissAllowed
         sheetView.layer.cornerRadius = appearance.layout.cornerRadius
         updateShadow()
         dimmerView.backgroundColor = appearance.dimmerColor
@@ -262,9 +265,11 @@ private extension BottomSheetController {
                 sheetView.addGestureRecognizer(pan)
                 panGesture = pan
             }
-        } else if let pan = panGesture {
-            sheetView.removeGestureRecognizer(pan)
-            panGesture = nil
+        } else {
+            if let pan = panGesture {
+                sheetView.removeGestureRecognizer(pan)
+                panGesture = nil
+            }
         }
     }
 
@@ -312,13 +317,17 @@ private extension BottomSheetController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onDimmerTap))
         dimmerTapView.addGestureRecognizer(tapGesture)
     }
+
+    func onDismiss() {
+        dismiss(animated: true)
+    }
 }
 
 extension BottomSheetController: SheetHeaderViewDelegate {
     @objc
     func didTapCloseButton() {
         // Directly dismiss the sheet without considering `isDismissAllowed`.
-        dismiss(animated: true)
+        onDismiss()
     }
 }
 

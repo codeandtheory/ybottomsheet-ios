@@ -66,7 +66,7 @@ private extension SheetHeaderView {
         buildConstraints()
         closeButton.addTarget(self, action: #selector(closeButtonAction), for: .touchUpInside)
         closeButton.accessibilityLabel = BottomSheetController.Strings.closeButton.localized
-        closeButton.accessibilityIdentifier = AccessibilityIdentifiers.buttonId
+        closeButton.accessibilityIdentifier = BottomSheetController.AccessibilityIdentifiers.buttonId
     }
     
     func buildViews() {

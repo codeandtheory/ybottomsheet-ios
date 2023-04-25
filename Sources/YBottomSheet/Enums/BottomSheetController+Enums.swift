@@ -9,16 +9,16 @@
 import Foundation
 import UIKit
 
-extension BottomSheetController {
+internal extension BottomSheetController {
     /// Priorities for various non-required constraints.
-    internal enum Priorities {
+    enum Priorities {
         static let panGesture = UILayoutPriority(775)
         static let sheetContentHugging = UILayoutPriority(751)
         static let sheetCompressionResistanceLow = UILayoutPriority.defaultLow
         static let sheetCompressionResistanceHigh = UILayoutPriority(800)
     }
     
-    internal enum Content {
+    enum Content {
         case view(title: String, view: UIView)
         case controller(_: UIViewController)
     }
