@@ -20,15 +20,15 @@ jobs:
     - name: Set Xcode version
       run: |
         ls -l /Applications | grep 'Xcode'
-        sudo xcode-select -s /Applications/Xcode_14.0.1.app
+        sudo xcode-select -s /Applications/Xcode_14.3.app
 
     - name: Lint code using SwiftLint
       run: swiftlint --strict --reporter github-actions-logging
 
     - name: Build iOS
       run:  |
-          xcodebuild -scheme YBottomSheet -sdk iphonesimulator16.0 -destination 'platform=iOS Simulator,name=iPhone 14' build-for-testing
+          xcodebuild -scheme YBottomSheet -sdk iphonesimulator16.3 -destination 'platform=iOS Simulator,name=iPhone 14' build-for-testing
           
     - name: Run tests iOS
       run: |
-          xcodebuild -scheme YBottomSheet -sdk iphonesimulator16.0 -destination 'platform=iOS Simulator,name=iPhone 14' test-without-building
+          xcodebuild -scheme YBottomSheet -sdk iphonesimulator16.3 -destination 'platform=iOS Simulator,name=iPhone 14' test-without-building
