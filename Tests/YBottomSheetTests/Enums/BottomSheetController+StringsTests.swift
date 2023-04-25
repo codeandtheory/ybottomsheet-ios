@@ -1,5 +1,5 @@
 //
-//  YBottomSheet+StringsTests.swift
+//  BottomSheetController+StringsTests.swift
 //  YBottomSheet
 //
 //  Created by Dev Karan on 15/02/23.
@@ -10,7 +10,7 @@ import XCTest
 import YCoreUI
 @testable import YBottomSheet
 
-final class YBottomSheetStringsTests: XCTestCase {
+final class BottomSheetControllerStringsTests: XCTestCase {
     func testLoad() {
         BottomSheetController.Strings.allCases.forEach {
             // Given a localized string constant
