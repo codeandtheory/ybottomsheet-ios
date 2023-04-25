@@ -12,11 +12,6 @@ import UIKit
 public class BottomSheetController: UIViewController {
     // Holds the sheet content until the view is loaded
     private let content: Content
-    private enum Content {
-        case view(title: String, view: UIView)
-        case controller(_: UIViewController)
-    }
-
     private var shadowSize: CGSize = .zero
     private let minimumTopOffset: CGFloat = 44
     private let minimumContentHeight: CGFloat = 88
@@ -30,14 +25,7 @@ public class BottomSheetController: UIViewController {
 
     /// Minimum downward velocity beyond which we interpret a pan gesture as a downward swipe.
     public var dismissThresholdVelocity: CGFloat = 1000
-
-    /// Priorities for various non-required constraints.
-    enum Priorities {
-        static let panGesture = UILayoutPriority(775)
-        static let sheetContentHugging = UILayoutPriority(751)
-        static let sheetCompressionResistanceLow = UILayoutPriority.defaultLow
-        static let sheetCompressionResistanceHigh = UILayoutPriority(800)
-    }
+    
     /// Dimmer tap view
     let dimmerTapView: UIView = {
         let view = UIView()
@@ -94,11 +82,9 @@ public class BottomSheetController: UIViewController {
     /// `UINavigationController` and hence already has its own `UINavigationBar` header.
     public var hasHeader: Bool {
         guard appearance.headerAppearance != nil else { return false }
-
         if case let .controller(childController) = content {
             return !(childController is UINavigationController)
         }
-
         return true
     }
 
@@ -161,7 +147,7 @@ public class BottomSheetController: UIViewController {
     /// This method is not called when the header's close button is tapped.
     func didDismiss() {
         if appearance.isDismissAllowed {
-            onDismiss()
+            dismiss(animated: true)
         }
     }
 }
@@ -230,8 +216,8 @@ private extension BottomSheetController {
         dimmerView.constrainEdges()
         dimmerTapView.constrainEdges(.notBottom)
         dimmerTapView.constrain(.bottomAnchor, to: sheetView.topAnchor)
+        
         sheetView.constrainEdges(.notTop)
-
         sheetView.constrain(
             .topAnchor,
             to: view.safeAreaLayoutGuide.topAnchor,
@@ -276,11 +262,9 @@ private extension BottomSheetController {
                 sheetView.addGestureRecognizer(pan)
                 panGesture = pan
             }
-        } else {
-            if let pan = panGesture {
-                sheetView.removeGestureRecognizer(pan)
-                panGesture = nil
-            }
+        } else if let pan = panGesture {
+            sheetView.removeGestureRecognizer(pan)
+            panGesture = nil
         }
     }
 
@@ -328,17 +312,13 @@ private extension BottomSheetController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onDimmerTap))
         dimmerTapView.addGestureRecognizer(tapGesture)
     }
-
-    func onDismiss() {
-        dismiss(animated: true)
-    }
 }
 
 extension BottomSheetController: SheetHeaderViewDelegate {
     @objc
     func didTapCloseButton() {
         // Directly dismiss the sheet without considering `isDismissAllowed`.
-        onDismiss()
+        dismiss(animated: true)
     }
 }
 
