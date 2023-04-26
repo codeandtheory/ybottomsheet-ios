@@ -76,7 +76,7 @@ private extension DragIndicatorViewTests {
         line: UInt = #line
     ) -> DragIndicatorView {
         let sut = DragIndicatorView(appearance: appearance)
-        trackForMemoryLeaks(sut, file: file, line: line)
+        trackForMemoryLeak(sut, file: file, line: line)
         return sut
     }
 }

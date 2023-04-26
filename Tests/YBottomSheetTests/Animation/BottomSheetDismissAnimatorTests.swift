@@ -84,8 +84,8 @@ private extension BottomSheetDismissAnimatorTests {
         )
         animator.reduceMotionOverride = isReduceMotionEnabled
         let context = MockAnimationContext(from: main, to: to)
-        trackForMemoryLeaks(animator, file: file, line: line)
-        trackForMemoryLeaks(context, file: file, line: line)
+        trackForMemoryLeak(animator, file: file, line: line)
+        trackForMemoryLeak(context, file: file, line: line)
         return (animator, context)
     }
 
@@ -98,7 +98,7 @@ private extension BottomSheetDismissAnimatorTests {
             childView: UIView(),
             appearance: BottomSheetController.Appearance(animationDuration: 0.0)
         )
-        trackForMemoryLeaks(sheet)
+        trackForMemoryLeak(sheet)
         return sheet
     }
 }

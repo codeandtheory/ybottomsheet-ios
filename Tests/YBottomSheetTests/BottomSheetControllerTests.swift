@@ -438,7 +438,7 @@ private extension BottomSheetControllerTests {
             childController: viewController,
             appearance: appearance
         )
-        trackForMemoryLeaks(sut, file: file, line: line)
+        trackForMemoryLeak(sut, file: file, line: line)
         return sut
     }
     
@@ -454,7 +454,7 @@ private extension BottomSheetControllerTests {
             childView: view,
             appearance: appearance
          )
-        trackForMemoryLeaks(sut, file: file, line: line)
+        trackForMemoryLeak(sut, file: file, line: line)
         return sut
     }
 }

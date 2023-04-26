@@ -77,7 +77,7 @@ private extension SheetHeaderViewTests {
         line: UInt = #line
     ) -> SheetHeaderView {
         let sut = SheetHeaderView(title: headerTitle, appearance: appearance)
-        trackForMemoryLeaks(sut, file: file, line: line)
+        trackForMemoryLeak(sut, file: file, line: line)
         return sut
     }
 }

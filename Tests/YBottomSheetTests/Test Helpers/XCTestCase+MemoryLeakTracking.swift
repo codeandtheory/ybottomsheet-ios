@@ -2,14 +2,14 @@
 //  XCTestCase+MemoryLeakTracking.swift
 //  YBottomSheet
 //
-//  Created by Dev Karan on 10/01/23.
+//  Created by Karthik K Manoj on 07/20/22.
 //  Copyright © 2023 Y Media Labs. All rights reserved.
 //
 
 import XCTest
 
 extension XCTestCase {
-    func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
+    func trackForMemoryLeak(_ instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
         addTeardownBlock { [weak instance] in
             XCTAssertNil(
                 instance,
