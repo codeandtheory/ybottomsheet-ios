@@ -10,12 +10,6 @@ import XCTest
 @testable import YBottomSheet
 
 final class DragIndicatorViewTests: XCTestCase {
-    func test_initWithCoder() throws {
-        let dragIndicatorView = DragIndicatorView()
-        let sut = DragIndicatorView(coder: try makeCoder(for: dragIndicatorView))
-        XCTAssertNil(sut)
-    }
-    
     func test_init_withDefaultValues() {
         let sut = makeSUT()
         XCTAssertNotNil(sut)
@@ -84,10 +78,5 @@ private extension DragIndicatorViewTests {
         let sut = DragIndicatorView(appearance: appearance)
         trackForMemoryLeaks(sut, file: file, line: line)
         return sut
-    }
-    
-    func makeCoder(for view: UIView) throws -> NSCoder {
-        let data = try NSKeyedArchiver.archivedData(withRootObject: view, requiringSecureCoding: false)
-        return try NSKeyedUnarchiver(forReadingFrom: data)
     }
 }

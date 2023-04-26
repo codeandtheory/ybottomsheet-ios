@@ -27,11 +27,6 @@ final class BottomSheetControllerTests: XCTestCase {
         super.tearDown()
     }
     
-    func test_initWithCoder() throws {
-        let sut = BottomSheetController(coder: try makeCoder(for: UIView()))
-        XCTAssertNil(sut)
-    }
-    
     func test_init_withViewControllerAsContentView() {
         let vc = UIViewController()
         vc.title = "Bottom Sheet"
@@ -419,11 +414,6 @@ private extension BottomSheetControllerTests {
          )
         trackForMemoryLeaks(sut, file: file, line: line)
         return sut
-    }
-    
-    func makeCoder(for view: UIView) throws -> NSCoder {
-        let data = try NSKeyedArchiver.archivedData(withRootObject: view, requiringSecureCoding: false)
-        return try NSKeyedUnarchiver(forReadingFrom: data)
     }
 }
 

@@ -119,8 +119,11 @@ public class BottomSheetController: UIViewController {
     }
     
     /// :nodoc:
-    internal required init?(coder: NSCoder) { nil }
-    
+    @available(*, unavailable)
+    required public init?(coder: NSCoder) {
+        fatalError("init(coder:) is not available for BottomSheetController")
+    }
+
     /// :nodoc:
     public override func viewDidLoad() {
         super.viewDidLoad()
