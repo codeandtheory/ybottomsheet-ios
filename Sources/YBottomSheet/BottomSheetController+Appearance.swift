@@ -32,7 +32,6 @@ extension BottomSheetController {
         ///
         /// The top of the sheet will not move beyond this gap from the top of the safe area.
         public var minimumTopOffset: CGFloat
-        /// Whether the sheet can be dismissed by swiping down or tapping on the dimmer. Default is `true`.
         /// (Optional) Minimum content view height. Default is `nil`.
         ///
         /// Only applicable for resizable sheets. `nil` means to use the content view's intrinsic height as the minimum.
