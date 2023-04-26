@@ -11,10 +11,19 @@ import YMatterType
 @testable import YBottomSheet
 
 final class BottomSheetControllerAppearanceTests: XCTestCase {
-    func test_init_propertiesDefaultValue() {
+    func test_init_propertiesDefaultValue() throws {
         let sut = BottomSheetController.Appearance.default
+        XCTAssertNil(sut.indicatorAppearance)
+        let headerAppearance = try XCTUnwrap(sut.headerAppearance)
+        XCTAssertHeaderAppearanceEqual(headerAppearance, .default)
         XCTAssertEqual(sut.layout, .default)
         XCTAssertEqual(sut.elevation, nil)
         XCTAssertEqual(sut.dimmerColor, .black.withAlphaComponent(0.5))
+        XCTAssertEqual(sut.animationDuration, 0.3)
+        XCTAssertEqual(sut.presentAnimationCurve, .curveEaseIn)
+        XCTAssertEqual(sut.dismissAnimationCurve, .curveEaseOut)
+        XCTAssertEqual(sut.minimumTopOffset, 44)
+        XCTAssertNil(sut.minimumContentHeight)
+        XCTAssertTrue(sut.isDismissAllowed)
     }
 }
