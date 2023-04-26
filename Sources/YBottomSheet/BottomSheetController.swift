@@ -10,16 +10,23 @@ import UIKit
 
 /// A view controller that manages a bottom sheet.
 public class BottomSheetController: UIViewController {
-    // Holds the sheet content until the view is loaded
-    private let content: Content
+    internal let content: Content
     private var shadowSize: CGSize = .zero
-    private let minimumTopOffset: CGFloat = 44
-    private let minimumContentHeight: CGFloat = 88
+    internal var minimumTopOffsetAnchor: NSLayoutConstraint?
     private var topAnchor: NSLayoutConstraint?
-    private var indicatorTopAnchor: NSLayoutConstraint?
+    internal var indicatorTopAnchor: NSLayoutConstraint?
     private var childHeightAnchor: NSLayoutConstraint?
     private var panGesture: UIPanGestureRecognizer?
     internal lazy var lastYOffset: CGFloat = { sheetView.frame.origin.y }()
+
+    /// Absolute minimum height of sheet content
+    ///
+    /// Only used when `appearance.minimumContentHeight == nil`.
+    public var minimumContentHeight: CGFloat = 88 {
+        didSet {
+            updateChildView()
+        }
+    }
 
     /// Minimum downward velocity beyond which we interpret a pan gesture as a downward swipe.
     public var dismissThresholdVelocity: CGFloat = 1000
@@ -42,11 +49,11 @@ public class BottomSheetController: UIViewController {
         return view
     }()
     /// Bottom sheet drag indicator view.
-    public private(set) var indicatorView: DragIndicatorView!
+    public internal(set) var indicatorView: DragIndicatorView!
     /// Container view for the drag indicator.
     internal let indicatorContainer = UIView()
     /// Bottom sheet header view.
-    public private(set) var headerView: SheetHeaderView!
+    public internal(set) var headerView: SheetHeaderView!
     /// Holds the sheet's child content (view or view controller).
     let contentView: UIView = {
         let view = UIView()
@@ -55,7 +62,7 @@ public class BottomSheetController: UIViewController {
     }()
 
     /// Comprises the indicator view, the header view, and the content view.
-    private let stackView: UIStackView = {
+    let stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.alignment = .center
@@ -162,97 +169,11 @@ public class BottomSheetController: UIViewController {
     }
 }
 
-private extension BottomSheetController {
-    func commonInit() {
-        modalPresentationStyle = .custom
-        transitioningDelegate = self
-    }
-
-    func build() {
-        switch content {
-        case .view(title: let title, view: let childView):
-            build(childView, title: title)
-        case .controller(let childController):
-            build(childController)
-        }
-    }
-
-    func build(_ subview: UIView, title: String) {
-        contentView.addSubview(subview)
-        subview.constrainEdges()
-
-        if let backgroundColor = subview.backgroundColor,
-           backgroundColor.rgbaComponents.alpha == 1 {
-            // use the subview's background color for the sheet
-            sheetView.backgroundColor = backgroundColor
-            // but we have to set the subview's background to nil or else
-            // it will overflow the sheet and not be cropped by the corner radius.
-            subview.backgroundColor = nil
-        }
-
-        indicatorView = DragIndicatorView(appearance: appearance.indicatorAppearance ?? .default)
-        indicatorContainer.addSubview(indicatorView)
-
-        headerView = SheetHeaderView(title: title, appearance: appearance.headerAppearance ?? .default)
-        headerView.delegate = self
-        buildSheet()
-    }
-    
-    func build(_ childController: UIViewController) {
-        addChild(childController)
-        build(childController.view, title: childController.title ?? "")
-        childController.didMove(toParent: self)
-    }
-    
-    func buildSheet() {
-        buildViews()
-        buildConstraints()
-        updateViewAppearance()
-        addGestures()
-    }
-
-    func buildViews() {
-        view.addSubview(dimmerView)
-        view.addSubview(dimmerTapView)
-        view.addSubview(sheetView)
-        sheetView.addSubview(stackView)
-        stackView.addArrangedSubview(indicatorContainer)
-        stackView.addArrangedSubview(headerView)
-        stackView.addArrangedSubview(contentView)
-    }
-
-    func buildConstraints() {
-        dimmerView.constrainEdges()
-        dimmerTapView.constrainEdges(.notBottom)
-        dimmerTapView.constrain(.bottomAnchor, to: sheetView.topAnchor)
-        
-        sheetView.constrainEdges(.notTop)
-        sheetView.constrain(
-            .topAnchor,
-            to: view.safeAreaLayoutGuide.topAnchor,
-            relatedBy: .greaterThanOrEqual,
-            constant: minimumTopOffset
-        )
-
-        indicatorView.constrain(.bottomAnchor, to: indicatorContainer.bottomAnchor)
-        indicatorTopAnchor = indicatorView.constrain(
-            .topAnchor,
-            to: indicatorContainer.topAnchor
-        )
-        indicatorView.constrainCenter(.x)
-
-        stackView.constrain(.topAnchor, to: sheetView.topAnchor)
-        stackView.constrainEdges(.horizontal, to: view.safeAreaLayoutGuide)
-        stackView.constrainEdges(.bottom, to: view.safeAreaLayoutGuide, relatedBy: .greaterThanOrEqual)
-        stackView.constrainEdges(.bottom, to: view.safeAreaLayoutGuide, priority: Priorities.sheetContentHugging)
-
-        contentView.constrainEdges(.horizontal)
-        headerView.constrainEdges(.horizontal)
-    }
-
+internal extension BottomSheetController {
     func updateViewAppearance() {
         dimmerTapView.isAccessibilityElement = appearance.isDismissAllowed
         sheetView.layer.cornerRadius = appearance.layout.cornerRadius
+        minimumTopOffsetAnchor?.constant = appearance.minimumTopOffset
         updateShadow()
         dimmerView.backgroundColor = appearance.dimmerColor
         updateIndicatorView()
@@ -260,7 +181,22 @@ private extension BottomSheetController {
         updateChildView()
         view.layoutIfNeeded()
     }
-    
+
+    func addGestures() {
+        let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(onSwipeDown))
+        swipeGesture.direction = .down
+        view.addGestureRecognizer(swipeGesture)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onDimmerTap))
+        dimmerTapView.addGestureRecognizer(tapGesture)
+    }
+}
+
+private extension BottomSheetController {
+    func commonInit() {
+        modalPresentationStyle = .custom
+        transitioningDelegate = self
+    }
+
     func updateIndicatorView() {
         indicatorContainer.isHidden = !isResizable
         if let indicatorAppearance = appearance.indicatorAppearance {
@@ -315,14 +251,6 @@ private extension BottomSheetController {
     
     func updateShadow() {
         appearance.elevation?.apply(layer: sheetView.layer)
-    }
-    
-    func addGestures() {
-        let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(onSwipeDown))
-        swipeGesture.direction = .down
-        view.addGestureRecognizer(swipeGesture)
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onDimmerTap))
-        dimmerTapView.addGestureRecognizer(tapGesture)
     }
 
     func onDismiss() {
