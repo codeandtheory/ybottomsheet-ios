@@ -15,15 +15,14 @@ final class SheetHeaderViewTests: XCTestCase {
     
     func test_init_withDefaultValues() {
         let sut = makeSUT()
-        XCTAssertNotNil(sut)
-        XCTAssertEqual(sut.titleLabel.typography.fontFamily.familyName, Typography.systemFamily.familyName)
-        XCTAssertEqual(sut.titleLabel.typography.fontSize, UIFont.labelFontSize)
-        XCTAssertEqual(sut.titleLabel.typography.fontWeight, .semibold)
-        XCTAssertEqual(sut.closeButton.isEnabled, true)
+
+        XCTAssertEqual(sut.titleLabel.textColor, .label)
+        XCTAssertTypographyEqual(sut.titleLabel.typography, .systemLabel.fontWeight(.semibold))
+        XCTAssertEqual(sut.closeButton.isHidden, false)
         XCTAssertEqual(sut.titleLabel.text, "")
     }
     
-    func test_init_withRandomValues() {
+    func test_init_withCustomValues() {
         let headerTitle = "Bottom Sheet"
         let appearance = SheetHeaderView.Appearance(
             title: (.red, .systemButton.bold),
@@ -31,27 +30,31 @@ final class SheetHeaderViewTests: XCTestCase {
             layout: .default
         )
         let sut = makeSUT(appearance: appearance, headerTitle: headerTitle)
-        XCTAssertNotNil(sut)
+
+        XCTAssertEqual(sut.titleLabel.textColor, .red)
+        XCTAssertTypographyEqual(sut.titleLabel.typography, .systemButton.bold)
         XCTAssertEqual(sut.titleLabel.typography.fontFamily.familyName, Typography.systemFamily.familyName)
         XCTAssertEqual(sut.titleLabel.typography.fontSize, UIFont.buttonFontSize)
         XCTAssertEqual(sut.titleLabel.typography.fontWeight, .bold)
-        XCTAssertEqual(sut.closeButton.isEnabled, true)
+        XCTAssertEqual(sut.closeButton.isHidden, true)
         XCTAssertEqual(sut.titleLabel.text, headerTitle)
     }
     
-    func test_changeHeaderViewTitleColor() {
+    func test_changeHeaderViewAppearance() {
         let sut = makeSUT()
         let color: UIColor = .red
         
         XCTAssertNotEqual(sut.titleLabel.textColor, color)
-        
+        XCTAssertTypographyEqual(sut.titleLabel.typography, .systemLabel.fontWeight(.semibold))
+
         sut.appearance = SheetHeaderView.Appearance(
-            title: (color, .systemButton.bold),
+            title: (color, .smallSystem.bold),
             closeButtonImage: nil,
             layout: .default
         )
         
         XCTAssertEqual(sut.titleLabel.textColor, color)
+        XCTAssertTypographyEqual(sut.titleLabel.typography, .smallSystem.bold)
     }
     
     func test_closeButtonAction() {
