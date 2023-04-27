@@ -15,11 +15,16 @@ final class SheetHeaderViewAppearanceTests: XCTestCase {
         let sut = SheetHeaderView.Appearance.default
         let expected = SheetHeaderView.Appearance(
             title: (.label, .systemLabel.fontWeight(.semibold)),
-            closeButtonImage: UIImage(systemName: "xmark"),
+            closeButtonImage: SheetHeaderView.Appearance.defaultCloseButtonImage,
             layout: .default
         )
         
         XCTAssertHeaderAppearanceEqual(sut, expected)
+    }
+
+    func test_defaultCloseButtonImage() {
+        let sut = SheetHeaderView.Appearance.defaultCloseButtonImage
+        XCTAssertEqual(sut, BottomSheetController.Images.xmark.image)
     }
 }
 
