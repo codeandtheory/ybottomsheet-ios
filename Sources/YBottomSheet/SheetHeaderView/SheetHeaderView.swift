@@ -48,8 +48,11 @@ open class SheetHeaderView: UIView {
     }
     
     /// :nodoc:
-    required public init?(coder: NSCoder) { nil }
-    
+    @available(*, unavailable)
+    required public init?(coder: NSCoder) {
+        fatalError("init(coder:) is not available for SheetHeaderView")
+    }
+
     @objc private func closeButtonAction() {
         delegate?.didTapCloseButton()
     }

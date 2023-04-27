@@ -28,6 +28,10 @@ extension BottomSheetController {
         public var presentAnimationCurve: UIView.AnimationOptions
         /// Animation type during dismissing. Default is `curveEaseOut`.
         public var dismissAnimationCurve: UIView.AnimationOptions
+        /// Minimum top offset of sheet from safe area top. Default is `44`.
+        ///
+        /// The top of the sheet will not move beyond this gap from the top of the safe area.
+        public var minimumTopOffset: CGFloat
         /// (Optional) Minimum content view height. Default is `nil`.
         ///
         /// Only applicable for resizable sheets. `nil` means to use the content view's intrinsic height as the minimum.
@@ -44,16 +48,17 @@ extension BottomSheetController {
 
         /// Initializes an `Appearance`.
         /// - Parameters:
-        ///   - indicatorAppearance: Appearance of the drag indicator or pass `nil` to hide.
-        ///   - headerAppearance: Appearance of the sheet header view or pass `nil` to hide.
-        ///   - layout: Bottom sheet layout properties such as corner radius.
-        ///   - elevation: Bottom sheet's shadow or pass `nil` to hide
-        ///   - dimmerColor: Dimmer view color or pass `nil` to hide.
-        ///   - animationDuration: Animation duration for bottom sheet. Default is `0.3`.
-        ///   - presentAnimationCurve: Animaiton during presenting.
-        ///   - dismissAnimationCurve: Animation during dismiss.
-        ///   - minimumContentHeight: Optional) Minimum content view height.
-        ///   - isDismissAllowed: Whether the sheet can be dismissed by swiping down or tapping on the dimmer.
+        ///   - indicatorAppearance: appearance of the drag indicator or pass `nil` to hide.
+        ///   - headerAppearance: appearance of the sheet header view or pass `nil` to hide.
+        ///   - layout: bottom sheet layout properties such as corner radius.
+        ///   - elevation: bottom sheet's shadow or pass `nil` to hide
+        ///   - dimmerColor: dimmer view color or pass `nil` to hide.
+        ///   - animationDuration: animation duration for bottom sheet. Default is `0.3`.
+        ///   - presentAnimationCurve: animation type during presenting.
+        ///   - dismissAnimationCurve: animation type during dismiss.
+        ///   - minimumTopOffset: minimum top offset. Default is `44`
+        ///   - minimumContentHeight: (optional) minimum content view height.
+        ///   - isDismissAllowed: whether the sheet can be dismissed by swiping down or tapping on the dimmer.
         public init(
             indicatorAppearance: DragIndicatorView.Appearance? = nil,
             headerAppearance: SheetHeaderView.Appearance? = .default,
@@ -63,6 +68,7 @@ extension BottomSheetController {
             animationDuration: TimeInterval = 0.3,
             presentAnimationCurve: UIView.AnimationOptions = .curveEaseIn,
             dismissAnimationCurve: UIView.AnimationOptions = .curveEaseOut,
+            minimumTopOffset: CGFloat = 44,
             minimumContentHeight: CGFloat? = nil,
             isDismissAllowed: Bool = true
         ) {
@@ -74,6 +80,7 @@ extension BottomSheetController {
             self.animationDuration = animationDuration
             self.presentAnimationCurve = presentAnimationCurve
             self.dismissAnimationCurve = dismissAnimationCurve
+            self.minimumTopOffset = minimumTopOffset
             self.minimumContentHeight = minimumContentHeight
             self.isDismissAllowed = isDismissAllowed
         }

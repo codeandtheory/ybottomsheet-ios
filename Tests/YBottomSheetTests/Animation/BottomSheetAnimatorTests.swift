@@ -46,7 +46,7 @@ private extension BottomSheetAnimatorTests {
         line: UInt = #line
     ) -> BottomSheetAnimator {
         let sut = BottomSheetAnimator(sheetViewController: sheetViewController)
-        trackForMemoryLeaks(sut, file: file, line: line)
+        trackForMemoryLeak(sut, file: file, line: line)
         return sut
     }
 }

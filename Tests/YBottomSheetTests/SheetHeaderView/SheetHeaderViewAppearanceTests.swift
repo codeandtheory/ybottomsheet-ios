@@ -13,11 +13,25 @@ import YMatterType
 final class SheetHeaderViewAppearanceTests: XCTestCase {
     func test_init_propertiesDefaultValue() {
         let sut = SheetHeaderView.Appearance.default
-        XCTAssertEqual(sut.title.textColor, .label)
-        XCTAssertEqual(sut.title.typography.fontFamily.familyName, Typography.systemFamily.familyName)
-        XCTAssertEqual(sut.title.typography.fontSize, UIFont.labelFontSize)
-        XCTAssertEqual(sut.title.typography.fontWeight, .semibold)
-        XCTAssertEqual(sut.closeButtonImage, UIImage(systemName: "xmark"))
-        XCTAssertEqual(sut.layout, SheetHeaderView.Appearance.Layout.default)
+        let expected = SheetHeaderView.Appearance(
+            title: (.label, .systemLabel.fontWeight(.semibold)),
+            closeButtonImage: UIImage(systemName: "xmark"),
+            layout: .default
+        )
+        
+        XCTAssertHeaderAppearanceEqual(sut, expected)
+    }
+}
+
+extension XCTestCase {
+    /// Compares two sheet header view appearances and asserts if they are not equal.
+    /// - Parameters:
+    ///   - lhs: the first appearance to compare
+    ///   - rh2: the second appearance to compare
+    func XCTAssertHeaderAppearanceEqual(_ lhs: SheetHeaderView.Appearance, _ rhs: SheetHeaderView.Appearance) {
+        XCTAssertEqual(lhs.title.textColor, rhs.title.textColor)
+        XCTAssertTypographyEqual(lhs.title.typography, rhs.title.typography)
+        XCTAssertEqual(lhs.closeButtonImage, rhs.closeButtonImage)
+        XCTAssertEqual(lhs.layout, rhs.layout)
     }
 }

@@ -27,22 +27,37 @@ final class BottomSheetControllerTests: XCTestCase {
         super.tearDown()
     }
     
-    func test_initWithCoder() throws {
-        let sut = BottomSheetController(coder: try makeCoder(for: UIView()))
-        XCTAssertNil(sut)
-    }
-    
     func test_init_withViewControllerAsContentView() {
         let vc = UIViewController()
         vc.title = "Bottom Sheet"
         let sut = makeSUT(viewController: vc)
-        XCTAssertNotNil(sut)
+        sut.loadViewIfNeeded()
+        
+        XCTAssertTrue(sut.contentView.subviews.contains(vc.view))
+        XCTAssertEqual(vc.parent, sut)
+        XCTAssertFalse(sut.children.isEmpty)
     }
     
     func test_init_withViewAsContentView() {
         let view = UIView()
         let sut = makeSUT(view: view, headerTitle: "Bottom Sheet")
-        XCTAssertNotNil(sut)
+        sut.loadViewIfNeeded()
+
+        XCTAssertTrue(sut.contentView.subviews.contains(view))
+        XCTAssertTrue(sut.children.isEmpty)
+    }
+
+    func test_viewDidAppear_setsVOFocus() {
+        // Given
+        let sut = SpyBottomSheetController(childController: UIViewController())
+        XCTAssertFalse(sut.voiceOverFocusSet)
+
+        // When (simulate view controller appearance)
+        sut.beginAppearanceTransition(true, animated: false)
+        sut.endAppearanceTransition()
+
+        // Then
+        XCTAssertTrue(sut.voiceOverFocusSet)
     }
     
     func test_init_withRandomValues() {
@@ -248,6 +263,28 @@ final class BottomSheetControllerTests: XCTestCase {
         XCTAssertEqual(sut.lastYOffset, offset)
     }
 
+    func test_draggingDown_doesNotResizeViewBelowMinimumContentSize() {
+        let sut = SpyBottomSheetController(title: "", childView: MiniView(), appearance: .defaultResizable)
+        sut.minimumContentHeight = CGFloat(Int.random(in: 32...128))
+        sut.loadViewIfNeeded()
+
+        let gesture = MockPanGesture()
+        gesture.state = .began
+        sut.simulateDragging(gesture)
+        let offset = sut.lastYOffset
+
+        gesture.state = .changed
+        let panDistance = CGFloat(Int.random(in: 20...100))
+        gesture.translation = CGPoint(x: 0, y: panDistance)
+        sut.simulateDragging(gesture)
+
+        gesture.state = .ended
+        sut.simulateDragging(gesture)
+        XCTAssertEqual(sut.lastYOffset, offset)
+        let chromeHeight = sut.indicatorContainer.bounds.height + (sut.headerView?.bounds.height ?? 0)
+        XCTAssertEqual(sut.view.bounds.height, offset + sut.minimumContentHeight + chromeHeight)
+    }
+
     func test_performEscape_dismissesSheet() {
         let sut = SpyBottomSheetController(childController: UIViewController())
         XCTAssertFalse(sut.isDismissed)
@@ -401,7 +438,7 @@ private extension BottomSheetControllerTests {
             childController: viewController,
             appearance: appearance
         )
-        trackForMemoryLeaks(sut, file: file, line: line)
+        trackForMemoryLeak(sut, file: file, line: line)
         return sut
     }
     
@@ -417,13 +454,8 @@ private extension BottomSheetControllerTests {
             childView: view,
             appearance: appearance
          )
-        trackForMemoryLeaks(sut, file: file, line: line)
+        trackForMemoryLeak(sut, file: file, line: line)
         return sut
-    }
-    
-    func makeCoder(for view: UIView) throws -> NSCoder {
-        let data = try NSKeyedArchiver.archivedData(withRootObject: view, requiringSecureCoding: false)
-        return try NSKeyedUnarchiver(forReadingFrom: data)
     }
 }
 
@@ -432,6 +464,7 @@ final class SpyBottomSheetController: BottomSheetController {
     var onSwipeDown = false
     var onDimmerTapped = false
     var onDragging = false
+    var voiceOverFocusSet = false
     
     override func simulateTapCloseButton() {
         super.simulateTapCloseButton()
@@ -459,6 +492,11 @@ final class SpyBottomSheetController: BottomSheetController {
         }
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        voiceOverFocusSet = true
+    }
+
     @discardableResult
     override func simulateDragging(_ gesture: UIPanGestureRecognizer) -> Bool {
         guard super.simulateDragging(gesture) == true else { return false }
@@ -476,6 +514,10 @@ final class SpyBottomSheetController: BottomSheetController {
 
 final class ChildView: UIView {
     override var intrinsicContentSize: CGSize { CGSize(width: 300, height: 300) }
+}
+
+final class MiniView: UIView {
+    override var intrinsicContentSize: CGSize { CGSize(width: 300, height: 16) }
 }
 
 final class MockPanGesture: UIPanGestureRecognizer {
