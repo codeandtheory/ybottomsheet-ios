@@ -1,5 +1,5 @@
 //
-//  SheetHeaderViewAppearanceTests.swift
+//  SheetHeaderView+AppearanceTests.swift
 //  YBottomSheet
 //
 //  Created by Dev Karan on 17/01/23.

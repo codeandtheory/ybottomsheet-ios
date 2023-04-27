@@ -1,5 +1,5 @@
 //
-//  DragIndicatorView.Appearance+Layout.swift
+//  DragIndicatorView+Appearance+Layout.swift
 //  YBottomSheet
 //
 //  Created by Dev Karan on 05/01/23.

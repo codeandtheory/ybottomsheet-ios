@@ -1,5 +1,5 @@
 //
-//  BottomSheetController.Appearance+Layout.swift
+//  BottomSheetController+Appearance+Layout.swift
 //  YBottomSheet
 //
 //  Created by Dev Karan on 19/01/23.
