@@ -26,8 +26,14 @@ open class SheetHeaderView: UIView {
     public let titleLabel = TypographyLabel(typography: .systemLabel.fontWeight(.semibold))
     
     /// Close button to dismiss the bottom sheet.
-    public let closeButton = UIButton()
-    
+    public let closeButton: UIButton = {
+        let button = UIButton()
+        button.adjustsImageSizeForAccessibilityContentSizeCategory = true
+        button.imageView?.contentMode = .scaleAspectFit
+        button.imageView?.constrainAspectRatio(1)
+        return button
+    }()
+
     private let buttonSize = CGSize(width: 44, height: 44)
     private weak var closeButtonLeadingConstraint: NSLayoutConstraint?
     private weak var closeButtonTrailingConstraint: NSLayoutConstraint?

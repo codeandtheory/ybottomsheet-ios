@@ -20,9 +20,12 @@ extension SheetHeaderView {
         /// Header view layout properties such as spacing between views. Default is `.default`.
         public let layout: Layout
         
-        /// Default appearance.
+        /// Default appearance
         public static let `default` = Appearance()
-                
+
+        /// Default close button image (SF symbol `xmark`)
+        public static let defaultCloseButtonImage: UIImage = BottomSheetController.Images.xmark.image
+
         /// Initializes a sheet header appearance.
         /// - Parameters:
         ///   - title: tuple consisting of `textColor` and `typography` for the title label.
@@ -30,7 +33,7 @@ extension SheetHeaderView {
         ///   - layout: sheet header view layout properties such as spacing between views.
         public init(
             title: (textColor: UIColor, typography: Typography) = (.label, .systemLabel.fontWeight(.semibold)),
-            closeButtonImage: UIImage? = UIImage(systemName: "xmark"),
+            closeButtonImage: UIImage? = defaultCloseButtonImage,
             layout: Layout = .default
         ) {
             self.title = title
