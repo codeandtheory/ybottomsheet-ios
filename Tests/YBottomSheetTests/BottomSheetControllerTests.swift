@@ -200,8 +200,7 @@ final class BottomSheetControllerTests: XCTestCase {
 
     func test_draggingDown_resizes_view() {
         let appearance = BottomSheetController.Appearance(
-            indicatorAppearance: .default,
-            minimumContentHeight: 150
+            indicatorAppearance: .default
         )
         let sut = SpyBottomSheetController(title: "", childView: ChildView(), appearance: appearance)
         sut.loadViewIfNeeded()
@@ -224,7 +223,7 @@ final class BottomSheetControllerTests: XCTestCase {
     func test_draggingUp_resizes_view() {
         let appearance = BottomSheetController.Appearance(
             indicatorAppearance: .default,
-            minimumContentHeight: 150
+            layout: BottomSheetController.Appearance.Layout(cornerRadius: 16, minimumContentHeight: 150)
         )
         let sut = SpyBottomSheetController(title: "", childView: ChildView(), appearance: appearance)
         sut.loadViewIfNeeded()
@@ -244,7 +243,37 @@ final class BottomSheetControllerTests: XCTestCase {
         XCTAssertEqual(sut.lastYOffset, offset - panDistance)
     }
 
-    func test_draggingDown_doesNotResizeViewBelowIntrinsicSize() {
+    func test_draggingUp_doesNotResizeViewAboveMaximumContentSize() {
+        let maximum: CGFloat = 310
+        let appearance = BottomSheetController.Appearance(
+            indicatorAppearance: .default,
+            layout: BottomSheetController.Appearance.Layout(cornerRadius: 16, maximumContentHeight: maximum)
+        )
+        let sut = SpyBottomSheetController(title: "", childView: ChildView(), appearance: appearance)
+        sut.loadViewIfNeeded()
+
+        let gesture = MockPanGesture()
+        gesture.state = .began
+        sut.simulateDragging(gesture)
+        let offset = sut.lastYOffset
+
+        gesture.state = .changed
+        let panDistance = CGFloat(Int.random(in: 20...100))
+        gesture.translation = CGPoint(x: 0, y: -panDistance)
+        sut.simulateDragging(gesture)
+
+        gesture.state = .ended
+        sut.simulateDragging(gesture)
+        XCTAssertEqual(sut.lastYOffset, offset - panDistance)
+        XCTAssertEqual(sut.contentView.bounds.height, maximum)
+        XCTAssertEqual(sut.sheetView.bounds.height, maximum + sut.chromeHeight)
+
+        let newMaximum: CGFloat = 320
+        sut.appearance.layout.maximumContentHeight = newMaximum
+        XCTAssertEqual(sut.contentView.bounds.height, newMaximum)
+    }
+
+    func test_draggingDown_doesResizeViewBelowIntrinsicSize() {
         let sut = SpyBottomSheetController(title: "", childView: ChildView(), appearance: .defaultResizable)
         sut.loadViewIfNeeded()
 
@@ -260,12 +289,13 @@ final class BottomSheetControllerTests: XCTestCase {
 
         gesture.state = .ended
         sut.simulateDragging(gesture)
-        XCTAssertEqual(sut.lastYOffset, offset)
+        XCTAssertGreaterThan(sut.lastYOffset, offset)
     }
 
     func test_draggingDown_doesNotResizeViewBelowMinimumContentSize() {
         let sut = SpyBottomSheetController(title: "", childView: MiniView(), appearance: .defaultResizable)
-        sut.minimumContentHeight = CGFloat(Int.random(in: 32...128))
+        let minimum = CGFloat(Int.random(in: 32...128))
+        sut.appearance.layout.minimumContentHeight = minimum
         sut.loadViewIfNeeded()
 
         let gesture = MockPanGesture()
@@ -281,8 +311,9 @@ final class BottomSheetControllerTests: XCTestCase {
         gesture.state = .ended
         sut.simulateDragging(gesture)
         XCTAssertEqual(sut.lastYOffset, offset)
-        let chromeHeight = sut.indicatorContainer.bounds.height + (sut.headerView?.bounds.height ?? 0)
-        XCTAssertEqual(sut.view.bounds.height, offset + sut.minimumContentHeight + chromeHeight)
+        XCTAssertEqual(sut.view.bounds.height, offset + minimum + sut.chromeHeight)
+        XCTAssertEqual(sut.contentView.bounds.height, minimum)
+        XCTAssertEqual(sut.sheetView.bounds.height, minimum + sut.chromeHeight)
     }
 
     func test_performEscape_dismissesSheet() {
@@ -424,6 +455,23 @@ final class BottomSheetControllerTests: XCTestCase {
             UIColor.systemBackground.resolvedColor(with: traits)
         )
     }
+
+    func test_idealContentSize_determinesInitialSheetSize() {
+        let ideal: CGFloat = 250
+        let sut = makeSUT(
+            view: ChildView(),
+            appearance: BottomSheetController.Appearance(
+                indicatorAppearance: .default,
+                layout: BottomSheetController.Appearance.Layout(idealContentHeight: ideal)
+            )
+        )
+        sut.loadViewIfNeeded()
+
+        XCTAssertEqual(sut.contentView.bounds.height, ideal)
+        let newIdeal: CGFloat = 200
+        sut.appearance.layout.idealContentHeight = newIdeal
+        XCTAssertEqual(sut.contentView.bounds.height, newIdeal)
+    }
 }
 
 private extension BottomSheetControllerTests {
@@ -456,6 +504,12 @@ private extension BottomSheetControllerTests {
          )
         trackForMemoryLeak(sut, file: file, line: line)
         return sut
+    }
+}
+
+extension BottomSheetController {
+    var chromeHeight: CGFloat {
+        indicatorContainer.bounds.height + (headerView?.bounds.height ?? 0)
     }
 }
 

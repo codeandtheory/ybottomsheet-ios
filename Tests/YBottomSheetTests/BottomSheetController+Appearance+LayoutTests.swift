@@ -9,7 +9,7 @@
 import XCTest
 @testable import YBottomSheet
 
-final class BottomSheetControllerAppearanceLayoutTests: XCTestCase {
+final class BottomSheetAppearanceLayoutTests: XCTestCase {
     func test_propertiesDefaultValue() {
         let sut = BottomSheetController.Appearance.Layout.default
         XCTAssertEqual(sut.cornerRadius, 16)

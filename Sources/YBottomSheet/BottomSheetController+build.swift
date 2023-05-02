@@ -75,6 +75,11 @@ private extension BottomSheetController {
             to: view.safeAreaLayoutGuide.topAnchor,
             relatedBy: .greaterThanOrEqual
         )
+        minimumContentHeightAnchor = contentView.constrain(
+            .heightAnchor,
+            relatedBy: .greaterThanOrEqual,
+            constant: appearance.layout.minimumContentHeight
+        )
 
         indicatorView.constrain(.bottomAnchor, to: indicatorContainer.bottomAnchor)
         indicatorTopAnchor = indicatorView.constrain(
@@ -86,8 +91,7 @@ private extension BottomSheetController {
         stackView.constrain(.topAnchor, to: sheetView.topAnchor)
         stackView.constrainEdges(.horizontal, to: view.safeAreaLayoutGuide)
         stackView.constrainEdges(.bottom, to: view.safeAreaLayoutGuide, relatedBy: .greaterThanOrEqual)
-        stackView.constrainEdges(.bottom, to: view.safeAreaLayoutGuide, priority: Priorities.sheetContentHugging)
-
+        stackView.constrainEdges(.bottom, to: view.safeAreaLayoutGuide)
         contentView.constrainEdges(.horizontal)
         headerView.constrainEdges(.horizontal)
     }

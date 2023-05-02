@@ -28,14 +28,6 @@ extension BottomSheetController {
         public var presentAnimationCurve: UIView.AnimationOptions
         /// Animation type during dismissing. Default is `curveEaseOut`.
         public var dismissAnimationCurve: UIView.AnimationOptions
-        /// Minimum top offset of sheet from safe area top. Default is `44`.
-        ///
-        /// The top of the sheet will not move beyond this gap from the top of the safe area.
-        public var minimumTopOffset: CGFloat
-        /// (Optional) Minimum content view height. Default is `nil`.
-        ///
-        /// Only applicable for resizable sheets. `nil` means to use the content view's intrinsic height as the minimum.
-        public var minimumContentHeight: CGFloat?
         /// Whether the sheet can be dismissed by swiping down or tapping on the dimmer. Default is `true`.
         ///
         /// The user can always dismiss the sheet from the close button if it is visible.
@@ -56,8 +48,6 @@ extension BottomSheetController {
         ///   - animationDuration: animation duration for bottom sheet. Default is `0.3`.
         ///   - presentAnimationCurve: animation type during presenting.
         ///   - dismissAnimationCurve: animation type during dismiss.
-        ///   - minimumTopOffset: minimum top offset. Default is `44`
-        ///   - minimumContentHeight: (optional) minimum content view height.
         ///   - isDismissAllowed: whether the sheet can be dismissed by swiping down or tapping on the dimmer.
         public init(
             indicatorAppearance: DragIndicatorView.Appearance? = nil,
@@ -68,8 +58,6 @@ extension BottomSheetController {
             animationDuration: TimeInterval = 0.3,
             presentAnimationCurve: UIView.AnimationOptions = .curveEaseIn,
             dismissAnimationCurve: UIView.AnimationOptions = .curveEaseOut,
-            minimumTopOffset: CGFloat = 44,
-            minimumContentHeight: CGFloat? = nil,
             isDismissAllowed: Bool = true
         ) {
             self.indicatorAppearance = indicatorAppearance
@@ -80,8 +68,6 @@ extension BottomSheetController {
             self.animationDuration = animationDuration
             self.presentAnimationCurve = presentAnimationCurve
             self.dismissAnimationCurve = dismissAnimationCurve
-            self.minimumTopOffset = minimumTopOffset
-            self.minimumContentHeight = minimumContentHeight
             self.isDismissAllowed = isDismissAllowed
         }
     }

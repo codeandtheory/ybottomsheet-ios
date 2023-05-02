@@ -39,21 +39,17 @@ extension BottomSheetController.Appearance {
         public var minimumContentHeight: CGFloat
 
         /// Default layout.
-        public static let `default` = Layout(cornerRadius: 16)
-
-        /// Initializes a sheet layout.
-        /// - Parameters:
-        ///   - cornerRadius: corner radius of bottom sheet view.
+        public static let `default` = Layout()
 
         // Initializes a bottom sheet layout.
         /// - Parameters:
-        ///   - cornerRadius: corner radius of bottom sheet view.
+        ///   - cornerRadius: corner radius of bottom sheet view. Default is `16`.
         ///   - minimumTopOffset: minimum top offset. Default is `44`.
         ///   - maximumContentHeight: maximum content height of sheet. Default is `nil`.
         ///   - idealContentHeight: ideal content height of sheet. Default is `nil`.
         ///   - minimumContentHeight: minimum content height of sheet. Default is `88`.
         public init(
-            cornerRadius: CGFloat,
+            cornerRadius: CGFloat = 16,
             minimumTopOffset: CGFloat = 44,
             maximumContentHeight: CGFloat? = nil,
             idealContentHeight: CGFloat? = nil,
