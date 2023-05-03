@@ -184,6 +184,15 @@ internal extension BottomSheetController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onDimmerTap))
         dimmerTapView.addGestureRecognizer(tapGesture)
     }
+
+    var childContentSize: CGSize {
+        switch content {
+        case .view(_, let view):
+            return view.layoutSize
+        case .controller(let viewController):
+            return viewController.layoutSize
+        }
+    }
 }
 
 private extension BottomSheetController {
@@ -237,14 +246,15 @@ private extension BottomSheetController {
         }
 
         // Enforce ideal height (if any)
-        // (otherwise sheet height defautls to childView.instrinsicContentSize.height)
-        if let ideal = appearance.layout.idealContentHeight {
+        // (otherwise sheet height defaults to childView.instrinsicContentSize.height)
+        let idealHeight = appearance.layout.idealContentHeight ?? childContentSize.height
+        if idealHeight > 0.0 {
             if let idealContentHeightAnchor = idealContentHeightAnchor {
-                idealContentHeightAnchor.constant = ideal
+                idealContentHeightAnchor.constant = idealHeight
             } else {
                 idealContentHeightAnchor = childView.constrain(
                     .heightAnchor,
-                    constant: ideal,
+                    constant: idealHeight,
                     priority: Priorities.idealContentSize
                 )
             }
