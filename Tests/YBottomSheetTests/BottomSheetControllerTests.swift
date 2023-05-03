@@ -203,7 +203,7 @@ final class BottomSheetControllerTests: XCTestCase {
             indicatorAppearance: .default
         )
         let sut = SpyBottomSheetController(title: "", childView: ChildView(), appearance: appearance)
-        sut.loadViewIfNeeded()
+        sut.view.layoutIfNeeded()
 
         let gesture = MockPanGesture()
         gesture.state = .began
@@ -226,7 +226,7 @@ final class BottomSheetControllerTests: XCTestCase {
             layout: BottomSheetController.Appearance.Layout(cornerRadius: 16, minimumContentHeight: 150)
         )
         let sut = SpyBottomSheetController(title: "", childView: ChildView(), appearance: appearance)
-        sut.loadViewIfNeeded()
+        sut.view.layoutIfNeeded()
 
         let gesture = MockPanGesture()
         gesture.state = .began
@@ -250,7 +250,7 @@ final class BottomSheetControllerTests: XCTestCase {
             layout: BottomSheetController.Appearance.Layout(cornerRadius: 16, maximumContentHeight: maximum)
         )
         let sut = SpyBottomSheetController(title: "", childView: ChildView(), appearance: appearance)
-        sut.loadViewIfNeeded()
+        sut.view.layoutIfNeeded()
 
         let gesture = MockPanGesture()
         gesture.state = .began
@@ -270,12 +270,13 @@ final class BottomSheetControllerTests: XCTestCase {
 
         let newMaximum: CGFloat = 320
         sut.appearance.layout.maximumContentHeight = newMaximum
+        sut.view.layoutIfNeeded()
         XCTAssertEqual(sut.contentView.bounds.height, newMaximum)
     }
 
     func test_draggingDown_doesResizeViewBelowIntrinsicSize() {
         let sut = SpyBottomSheetController(title: "", childView: ChildView(), appearance: .defaultResizable)
-        sut.loadViewIfNeeded()
+        sut.view.layoutIfNeeded()
 
         let gesture = MockPanGesture()
         gesture.state = .began
@@ -296,7 +297,7 @@ final class BottomSheetControllerTests: XCTestCase {
         let sut = SpyBottomSheetController(title: "", childView: MiniView(), appearance: .defaultResizable)
         let minimum = CGFloat(Int.random(in: 32...128))
         sut.appearance.layout.minimumContentHeight = minimum
-        sut.loadViewIfNeeded()
+        sut.view.layoutIfNeeded()
 
         let gesture = MockPanGesture()
         gesture.state = .began
@@ -465,11 +466,12 @@ final class BottomSheetControllerTests: XCTestCase {
                 layout: BottomSheetController.Appearance.Layout(idealContentHeight: ideal)
             )
         )
-        sut.loadViewIfNeeded()
+        sut.view.layoutIfNeeded()
 
         XCTAssertEqual(sut.contentView.bounds.height, ideal)
         let newIdeal: CGFloat = 200
         sut.appearance.layout.idealContentHeight = newIdeal
+        sut.view.layoutIfNeeded()
         XCTAssertEqual(sut.contentView.bounds.height, newIdeal)
     }
 }

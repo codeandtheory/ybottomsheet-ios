@@ -174,7 +174,6 @@ internal extension BottomSheetController {
         updateIndicatorView()
         updateHeaderView()
         updateChildView()
-        view.layoutIfNeeded()
     }
 
     func addGestures() {
