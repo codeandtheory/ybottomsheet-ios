@@ -99,13 +99,13 @@ final class BottomSheetControllerTests: XCTestCase {
         let cornerRadius = CGFloat(Int.random(in: 1...7))
 
         XCTAssertEqual(
-            sut.sheetView.layer.cornerRadius,
+            sut.sheetContainerView.layer.cornerRadius,
             BottomSheetController.Appearance.Layout.default.cornerRadius
         )
 
         sut.appearance.layout.cornerRadius = cornerRadius
 
-        XCTAssertEqual(sut.sheetView.layer.cornerRadius, cornerRadius)
+        XCTAssertEqual(sut.sheetContainerView.layer.cornerRadius, cornerRadius)
     }
 
     func test_changeBeforeLoad_hasNoEffect() {
@@ -114,7 +114,7 @@ final class BottomSheetControllerTests: XCTestCase {
 
         sut.appearance.layout.cornerRadius = cornerRadius
 
-        XCTAssertNotEqual(sut.sheetView.layer.cornerRadius, cornerRadius)
+        XCTAssertNotEqual(sut.sheetContainerView.layer.cornerRadius, cornerRadius)
     }
 
     func test_hideHeaderView() {
@@ -422,8 +422,9 @@ final class BottomSheetControllerTests: XCTestCase {
 
         sut.loadViewIfNeeded()
 
+        XCTAssertNil(sut.sheetView.backgroundColor)
         XCTAssertEqual(
-            sut.sheetView.backgroundColor?.resolvedColor(with: traits),
+            sut.sheetContainerView.backgroundColor?.resolvedColor(with: traits),
             color.resolvedColor(with: traits)
         )
         XCTAssertNil(view.backgroundColor)
@@ -437,8 +438,9 @@ final class BottomSheetControllerTests: XCTestCase {
 
         sut.loadViewIfNeeded()
 
+        XCTAssertNil(sut.sheetView.backgroundColor)
         XCTAssertEqual(
-            sut.sheetView.backgroundColor?.resolvedColor(with: traits),
+            sut.sheetContainerView.backgroundColor?.resolvedColor(with: traits),
             UIColor.systemBackground.resolvedColor(with: traits)
         )
     }
@@ -451,8 +453,9 @@ final class BottomSheetControllerTests: XCTestCase {
 
         sut.loadViewIfNeeded()
 
+        XCTAssertNil(sut.sheetView.backgroundColor)
         XCTAssertEqual(
-            sut.sheetView.backgroundColor?.resolvedColor(with: traits),
+            sut.sheetContainerView.backgroundColor?.resolvedColor(with: traits),
             UIColor.systemBackground.resolvedColor(with: traits)
         )
     }

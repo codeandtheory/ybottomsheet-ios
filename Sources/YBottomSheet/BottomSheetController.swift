@@ -37,9 +37,12 @@ public class BottomSheetController: UIViewController {
     /// Dimmer view.
     let dimmerView = UIView()
     /// Bottom sheet view.
-    let sheetView: UIView = {
+    let sheetView = UIView()
+    /// Bottom sheet container view.
+    let sheetContainerView: UIView = {
         let view = UIView()
         view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+        view.clipsToBounds = true
         view.backgroundColor = .systemBackground
         return view
     }()
@@ -50,11 +53,7 @@ public class BottomSheetController: UIViewController {
     /// Bottom sheet header view.
     public internal(set) var headerView: SheetHeaderView!
     /// Holds the sheet's child content (view or view controller).
-    let contentView: UIView = {
-        let view = UIView()
-        view.clipsToBounds = true
-        return view
-    }()
+    let contentView = UIView()
 
     /// Comprises the indicator view, the header view, and the content view.
     let stackView: UIStackView = {
@@ -145,7 +144,7 @@ public class BottomSheetController: UIViewController {
         
         guard shadowSize != sheetView.bounds.size else { return }
         updateShadow()
-        shadowSize = contentView.bounds.size
+        shadowSize = sheetView.bounds.size
     }
     
     /// Performing the accessibility escape gesture dismisses the bottom sheet.
@@ -167,7 +166,7 @@ public class BottomSheetController: UIViewController {
 internal extension BottomSheetController {
     func updateViewAppearance() {
         dimmerTapView.isAccessibilityElement = appearance.isDismissAllowed
-        sheetView.layer.cornerRadius = appearance.layout.cornerRadius
+        sheetContainerView.layer.cornerRadius = appearance.layout.cornerRadius
         minimumTopOffsetAnchor?.constant = appearance.layout.minimumTopOffset
         updateShadow()
         dimmerView.backgroundColor = appearance.dimmerColor
@@ -191,6 +190,10 @@ internal extension BottomSheetController {
         case .controller(let viewController):
             return viewController.layoutSize
         }
+    }
+
+    func updateShadow() {
+        appearance.elevation?.apply(layer: sheetView.layer, cornerRadius: appearance.layout.cornerRadius)
     }
 }
 
@@ -267,10 +270,6 @@ private extension BottomSheetController {
         childView.setContentCompressionResistancePriority(Priorities.sheetCompressionResistance, for: .vertical)
     }
     
-    func updateShadow() {
-        appearance.elevation?.apply(layer: sheetView.layer)
-    }
-
     func onDismiss() {
         dismiss(animated: true)
     }

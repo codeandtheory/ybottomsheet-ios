@@ -27,7 +27,7 @@ private extension BottomSheetController {
         if let backgroundColor = subview.backgroundColor,
            backgroundColor.rgbaComponents.alpha == 1 {
             // use the subview's background color for the sheet
-            sheetView.backgroundColor = backgroundColor
+            sheetContainerView.backgroundColor = backgroundColor
             // but we have to set the subview's background to nil or else
             // it will overflow the sheet and not be cropped by the corner radius.
             subview.backgroundColor = nil
@@ -58,7 +58,8 @@ private extension BottomSheetController {
         view.addSubview(dimmerView)
         view.addSubview(dimmerTapView)
         view.addSubview(sheetView)
-        sheetView.addSubview(stackView)
+        sheetView.addSubview(sheetContainerView)
+        sheetContainerView.addSubview(stackView)
         stackView.addArrangedSubview(indicatorContainer)
         stackView.addArrangedSubview(headerView)
         stackView.addArrangedSubview(contentView)
@@ -68,6 +69,7 @@ private extension BottomSheetController {
         dimmerView.constrainEdges()
         dimmerTapView.constrainEdges(.notBottom)
         dimmerTapView.constrain(.bottomAnchor, to: sheetView.topAnchor)
+        sheetContainerView.constrainEdges()
 
         sheetView.constrainEdges(.notTop)
         minimumTopOffsetAnchor = sheetView.constrain(
@@ -88,9 +90,8 @@ private extension BottomSheetController {
         )
         indicatorView.constrainCenter(.x)
 
-        stackView.constrain(.topAnchor, to: sheetView.topAnchor)
+        stackView.constrainEdges(.top)
         stackView.constrainEdges(.horizontal, to: view.safeAreaLayoutGuide)
-        stackView.constrainEdges(.bottom, to: view.safeAreaLayoutGuide, relatedBy: .greaterThanOrEqual)
         stackView.constrainEdges(.bottom, to: view.safeAreaLayoutGuide)
         contentView.constrainEdges(.horizontal)
         headerView.constrainEdges(.horizontal)
