@@ -10,6 +10,12 @@ import UIKit
 
 /// Performs the sheet present animation.
 class BottomSheetPresentAnimator: BottomSheetAnimator {
+    /// Initializes a bottom sheet animator.
+    /// - Parameter sheetViewController: the sheet being animated.
+    required init(sheetViewController: BottomSheetController) {
+        super.init(sheetViewController: sheetViewController, direction: .present)
+    }
+
     override func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         guard let toViewController = transitionContext.viewController(forKey: .to) else {
             transitionContext.completeTransition(false)
@@ -44,11 +50,7 @@ class BottomSheetPresentAnimator: BottomSheetAnimator {
             sheet.dimmerView.alpha = 1
         }
         
-        UIView.animate(
-            withDuration: duration,
-            delay: .zero,
-            options: [.beginFromCurrentState, sheet.appearance.presentAnimationCurve]
-        ) {
+        UIView.animate(with: sheet.appearance.presentAnimation) {
             if self.isReduceMotionEnabled {
                 sheet.sheetView.alpha = 1
             } else {

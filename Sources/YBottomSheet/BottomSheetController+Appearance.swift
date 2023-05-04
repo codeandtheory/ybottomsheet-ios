@@ -22,13 +22,10 @@ extension BottomSheetController {
         public var elevation: Elevation?
         /// Dimmer view color. Default is 'UIColor.black.withAlphaComponent(0.5)'.
         public var dimmerColor: UIColor?
-        /// Animation duration on bottom sheet. Default is `0.3`.
-        public var animationDuration: TimeInterval
-        /// Animation type during presenting. Default is `curveEaseIn`.
-        public var presentAnimationCurve: UIView.AnimationOptions
-        /// Animation type during dismissing. Default is `curveEaseOut`.
-        public var dismissAnimationCurve: UIView.AnimationOptions
-        /// Whether the sheet can be dismissed by swiping down or tapping on the dimmer. Default is `true`.
+        /// Animation for presenting the bottom sheet. Default = `.defaultPresent`.
+        public var presentAnimation: Animation
+        /// Animation for dismissing the bottom sheet. Default = `.defaultDismiss`.
+        public var dismissAnimation: Animation
         ///
         /// The user can always dismiss the sheet from the close button if it is visible.
         public var isDismissAllowed: Bool
@@ -43,11 +40,10 @@ extension BottomSheetController {
         ///   - indicatorAppearance: appearance of the drag indicator or pass `nil` to hide.
         ///   - headerAppearance: appearance of the sheet header view or pass `nil` to hide.
         ///   - layout: bottom sheet layout properties such as corner radius.
-        ///   - elevation: bottom sheet's shadow or pass `nil` to hide
+        ///   - elevation: bottom sheet's shadow or pass `nil` to hide.
         ///   - dimmerColor: dimmer view color or pass `nil` to hide.
-        ///   - animationDuration: animation duration for bottom sheet. Default is `0.3`.
-        ///   - presentAnimationCurve: animation type during presenting.
-        ///   - dismissAnimationCurve: animation type during dismiss.
+        ///   - presentAnimation: animation for presenting the bottom sheet.
+        ///   - dismissAnimation: animation for dismissing the bottom sheet.
         ///   - isDismissAllowed: whether the sheet can be dismissed by swiping down or tapping on the dimmer.
         public init(
             indicatorAppearance: DragIndicatorView.Appearance? = nil,
@@ -55,9 +51,8 @@ extension BottomSheetController {
             layout: Layout = .default,
             elevation: Elevation? = nil,
             dimmerColor: UIColor? = .black.withAlphaComponent(0.5),
-            animationDuration: TimeInterval = 0.3,
-            presentAnimationCurve: UIView.AnimationOptions = .curveEaseIn,
-            dismissAnimationCurve: UIView.AnimationOptions = .curveEaseOut,
+            presentAnimation: Animation = .defaultPresent,
+            dismissAnimation: Animation = .defaultDismiss,
             isDismissAllowed: Bool = true
         ) {
             self.indicatorAppearance = indicatorAppearance
@@ -65,9 +60,8 @@ extension BottomSheetController {
             self.layout = layout
             self.elevation = elevation
             self.dimmerColor = dimmerColor
-            self.animationDuration = animationDuration
-            self.presentAnimationCurve = presentAnimationCurve
-            self.dismissAnimationCurve = dismissAnimationCurve
+            self.presentAnimation = presentAnimation
+            self.dismissAnimation = dismissAnimation
             self.isDismissAllowed = isDismissAllowed
         }
     }

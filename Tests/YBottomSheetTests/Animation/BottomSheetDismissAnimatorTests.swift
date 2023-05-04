@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import YCoreUI
 @testable import YBottomSheet
 
 final class BottomSheetDismissAnimatorTests: XCTestCase {
@@ -14,6 +15,7 @@ final class BottomSheetDismissAnimatorTests: XCTestCase {
         let sheetController = makeSheet()
         let (sut, context) = try makeSUT(sheetViewController: sheetController, to: sheetController)
 
+        XCTAssertEqual(sut.transitionDuration(using: context), 0.0)
         XCTAssertTrue(sut is BottomSheetDismissAnimator)
         XCTAssertFalse(context.wasCompleteCalled)
         sut.animateTransition(using: context)
@@ -32,6 +34,7 @@ final class BottomSheetDismissAnimatorTests: XCTestCase {
             isReduceMotionEnabled: false
         )
 
+        XCTAssertEqual(sut.transitionDuration(using: context), 0.0)
         sut.animateTransition(using: context)
 
         // Wait for the run loop to tick (animate keyboard)
@@ -49,6 +52,7 @@ final class BottomSheetDismissAnimatorTests: XCTestCase {
             isReduceMotionEnabled: true
         )
 
+        XCTAssertEqual(sut.transitionDuration(using: context), 0.0)
         sut.animateTransition(using: context)
 
         // Wait for the run loop to tick (animate keyboard)
@@ -62,6 +66,7 @@ final class BottomSheetDismissAnimatorTests: XCTestCase {
         let sheetController = makeSheet()
         let (sut, context) = try makeSUT(sheetViewController: sheetController, to: nil)
 
+        XCTAssertEqual(sut.transitionDuration(using: context), 0.0)
         XCTAssertFalse(context.wasCompleteCalled)
         sut.animateTransition(using: context)
 
@@ -96,7 +101,9 @@ private extension BottomSheetDismissAnimatorTests {
         let sheet = BottomSheetController(
             title: "Bottom Sheet",
             childView: UIView(),
-            appearance: BottomSheetController.Appearance(animationDuration: 0.0)
+            appearance: BottomSheetController.Appearance(
+                dismissAnimation: Animation(duration: 0.0, curve: .regular(options: .curveEaseOut))
+            )
         )
         trackForMemoryLeak(sheet)
         return sheet

@@ -10,6 +10,12 @@ import UIKit
 
 /// Performs the sheet dismiss animation.
 class BottomSheetDismissAnimator: BottomSheetAnimator {
+    /// Initializes a bottom sheet animator.
+    /// - Parameter sheetViewController: the sheet being animated.
+    required init(sheetViewController: BottomSheetController) {
+        super.init(sheetViewController: sheetViewController, direction: .dismiss)
+    }
+    
     override func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         guard let fromViewController = transitionContext.viewController(forKey: .from),
               let toViewController = transitionContext.viewController(forKey: .to) else {
@@ -31,12 +37,8 @@ class BottomSheetDismissAnimator: BottomSheetAnimator {
         ) {
             sheet.dimmerView.alpha = 0
         }
-        
-        UIView.animate(
-            withDuration: duration,
-            delay: .zero,
-            options: [.beginFromCurrentState, sheet.appearance.dismissAnimationCurve]
-        ) {
+
+        UIView.animate(with: sheet.appearance.dismissAnimation) {
             if self.isReduceMotionEnabled {
                 sheet.sheetView.alpha = 0
             } else {
