@@ -1,5 +1,5 @@
 //
-//  BottomSheetControllerAppearanceTests.swift
+//  BottomSheetController+AppearanceTests.swift
 //  YBottomSheet
 //
 //  Created by Dev Karan on 19/01/23.
@@ -22,8 +22,6 @@ final class BottomSheetControllerAppearanceTests: XCTestCase {
         XCTAssertEqual(sut.animationDuration, 0.3)
         XCTAssertEqual(sut.presentAnimationCurve, .curveEaseIn)
         XCTAssertEqual(sut.dismissAnimationCurve, .curveEaseOut)
-        XCTAssertEqual(sut.minimumTopOffset, 44)
-        XCTAssertNil(sut.minimumContentHeight)
         XCTAssertTrue(sut.isDismissAllowed)
     }
 }

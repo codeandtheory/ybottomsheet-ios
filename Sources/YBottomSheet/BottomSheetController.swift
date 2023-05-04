@@ -12,21 +12,16 @@ import UIKit
 public class BottomSheetController: UIViewController {
     internal let content: Content
     private var shadowSize: CGSize = .zero
+
     internal var minimumTopOffsetAnchor: NSLayoutConstraint?
     private var topAnchor: NSLayoutConstraint?
     internal var indicatorTopAnchor: NSLayoutConstraint?
-    private var childHeightAnchor: NSLayoutConstraint?
+    private var maximumContentHeightAnchor: NSLayoutConstraint?
+    internal var idealContentHeightAnchor: NSLayoutConstraint?
+    internal var minimumContentHeightAnchor: NSLayoutConstraint?
+
     private var panGesture: UIPanGestureRecognizer?
     internal lazy var lastYOffset: CGFloat = { sheetView.frame.origin.y }()
-
-    /// Absolute minimum height of sheet content
-    ///
-    /// Only used when `appearance.minimumContentHeight == nil`.
-    public var minimumContentHeight: CGFloat = 88 {
-        didSet {
-            updateChildView()
-        }
-    }
 
     /// Minimum downward velocity beyond which we interpret a pan gesture as a downward swipe.
     public var dismissThresholdVelocity: CGFloat = 1000
@@ -42,9 +37,12 @@ public class BottomSheetController: UIViewController {
     /// Dimmer view.
     let dimmerView = UIView()
     /// Bottom sheet view.
-    let sheetView: UIView = {
+    let sheetView = UIView()
+    /// Bottom sheet container view.
+    let sheetContainerView: UIView = {
         let view = UIView()
         view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+        view.clipsToBounds = true
         view.backgroundColor = .systemBackground
         return view
     }()
@@ -55,11 +53,7 @@ public class BottomSheetController: UIViewController {
     /// Bottom sheet header view.
     public internal(set) var headerView: SheetHeaderView!
     /// Holds the sheet's child content (view or view controller).
-    let contentView: UIView = {
-        let view = UIView()
-        view.clipsToBounds = true
-        return view
-    }()
+    let contentView = UIView()
 
     /// Comprises the indicator view, the header view, and the content view.
     let stackView: UIStackView = {
@@ -150,7 +144,7 @@ public class BottomSheetController: UIViewController {
         
         guard shadowSize != sheetView.bounds.size else { return }
         updateShadow()
-        shadowSize = contentView.bounds.size
+        shadowSize = sheetView.bounds.size
     }
     
     /// Performing the accessibility escape gesture dismisses the bottom sheet.
@@ -172,14 +166,13 @@ public class BottomSheetController: UIViewController {
 internal extension BottomSheetController {
     func updateViewAppearance() {
         dimmerTapView.isAccessibilityElement = appearance.isDismissAllowed
-        sheetView.layer.cornerRadius = appearance.layout.cornerRadius
-        minimumTopOffsetAnchor?.constant = appearance.minimumTopOffset
+        sheetContainerView.layer.cornerRadius = appearance.layout.cornerRadius
+        minimumTopOffsetAnchor?.constant = appearance.layout.minimumTopOffset
         updateShadow()
         dimmerView.backgroundColor = appearance.dimmerColor
         updateIndicatorView()
         updateHeaderView()
         updateChildView()
-        view.layoutIfNeeded()
     }
 
     func addGestures() {
@@ -188,6 +181,19 @@ internal extension BottomSheetController {
         view.addGestureRecognizer(swipeGesture)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onDimmerTap))
         dimmerTapView.addGestureRecognizer(tapGesture)
+    }
+
+    var childContentSize: CGSize {
+        switch content {
+        case .view(_, let view):
+            return view.layoutSize
+        case .controller(let viewController):
+            return viewController.layoutSize
+        }
+    }
+
+    func updateShadow() {
+        appearance.elevation?.apply(layer: sheetView.layer, cornerRadius: appearance.layout.cornerRadius)
     }
 }
 
@@ -226,33 +232,44 @@ private extension BottomSheetController {
     func updateChildView() {
         guard let childView = contentView.subviews.first else { return }
 
-        let height: CGFloat
-        let priority: UILayoutPriority
-
-        if let minimum = appearance.minimumContentHeight {
-            // If a minimum is specified, we make the sheet relatively easy to compress
-            // and enforce that specified minimum.
-            height = minimum
-            priority = Priorities.sheetCompressionResistanceLow
+        // Enforce maximum height (if any)
+        if let maximum = appearance.layout.maximumContentHeight {
+            if let maximumContentHeightAnchor = maximumContentHeightAnchor {
+                maximumContentHeightAnchor.constant = maximum
+            } else {
+                maximumContentHeightAnchor = childView.constrain(
+                    .heightAnchor,
+                    relatedBy: .lessThanOrEqual,
+                    constant: maximum
+                )
+            }
         } else {
-            // If no minimumContentHeight is specified, we make the sheet difficult
-            // to compress beyond intrinsicContentSize.height and enforce an absolute minimum.
-            height = minimumContentHeight // absolute minimum
-            priority = Priorities.sheetCompressionResistanceHigh
+            maximumContentHeightAnchor?.isActive = false
         }
 
-        childView.setContentCompressionResistancePriority(priority, for: .vertical)
-        if let anchor = childHeightAnchor {
-            anchor.constant = height
+        // Enforce ideal height (if any)
+        // (otherwise sheet height defaults to childView.instrinsicContentSize.height)
+        let idealHeight = appearance.layout.idealContentHeight ?? childContentSize.height
+        if idealHeight > 0.0 {
+            if let idealContentHeightAnchor = idealContentHeightAnchor {
+                idealContentHeightAnchor.constant = idealHeight
+            } else {
+                idealContentHeightAnchor = childView.constrain(
+                    .heightAnchor,
+                    constant: idealHeight,
+                    priority: Priorities.idealContentSize
+                )
+            }
         } else {
-            childHeightAnchor = childView.constrain(.heightAnchor, relatedBy: .greaterThanOrEqual, constant: height)
+            idealContentHeightAnchor?.isActive = false
         }
+
+        // Enforce minimum height
+        minimumContentHeightAnchor?.constant = appearance.layout.minimumContentHeight
+
+        childView.setContentCompressionResistancePriority(Priorities.sheetCompressionResistance, for: .vertical)
     }
     
-    func updateShadow() {
-        appearance.elevation?.apply(layer: sheetView.layer)
-    }
-
     func onDismiss() {
         dismiss(animated: true)
     }

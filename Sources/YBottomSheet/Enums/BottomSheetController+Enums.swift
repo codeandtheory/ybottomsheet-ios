@@ -12,9 +12,8 @@ internal extension BottomSheetController {
     /// Priorities for various non-required constraints.
     enum Priorities {
         static let panGesture = UILayoutPriority(775)
-        static let sheetContentHugging = UILayoutPriority(751)
-        static let sheetCompressionResistanceLow = UILayoutPriority.defaultLow
-        static let sheetCompressionResistanceHigh = UILayoutPriority(800)
+        static let idealContentSize = UILayoutPriority(251)
+        static let sheetCompressionResistance = UILayoutPriority.defaultLow
     }
 
     /// Types of content that can populate a bottom sheet

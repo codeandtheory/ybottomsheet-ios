@@ -28,6 +28,9 @@ class BottomSheetPresentAnimator: BottomSheetAnimator {
             var sheetFrame = sheet.sheetView.frame
             sheetFrame.origin.y = toFinalFrame.maxY + (sheet.appearance.elevation?.extent.top ?? 0)
             sheet.sheetView.frame = sheetFrame
+            // lay out sheet's subviews prior to first appearance
+            sheet.sheetView.layoutIfNeeded()
+            sheet.updateShadow()
             sheet.view.setNeedsLayout()
         }
         
