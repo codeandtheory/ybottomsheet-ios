@@ -21,19 +21,6 @@ Usage
 ### Initializers
 The Bottom sheet controller can be initialized with either a title and a view or else with a view controller. 
 
-```swift
-init(
-    title: String,
-    childView: UIView,
-    appearance: BottomSheetController.Appearance = .default
-)
-
-init(
-    childController: UIViewController,
-    appearance: BottomSheetController.Appearance = .default
-)
-```
-
 When initializing with a view controller, the title is drawn from `UIViewController.title`. When the view controller is a `UINavigationController`, the header appearance options are ignored and the navigation controller's navigation bar is displayed as the sheet's header. In this situation, if you wish to have a close button, then that should be set using the view controller's `navigationItem.rightBarButtonItem` or `.leftBarButtonItem`.
 
 Both initializers include an appearance parameter that allows you to fully customize the sheet's appearance. You can also update the sheet's appearance at any time.
@@ -84,33 +71,15 @@ final class ViewController: UIViewController {
 ### Customization
 `BottomSheetController` has an `appearance` property of type `Appearance`.
 
-`Appearance` lets you customize the bottom sheet appearance. We can customize the appearance of the indicator view, the header view, dimmer color, animation etc.
+`Appearance` lets you customize how the bottom sheet both appears and behaves. You can customize:
 
-```swift
-/// Determines the appearance of the bottom sheet.
-public struct Appearance {
-    /// Appearance of the drag indicator.
-    public var indicatorAppearance: DragIndicatorView.Appearance?
-    /// Appearance of the sheet header view.
-    public var headerAppearance: SheetHeaderView.Appearance?
-    /// Bottom sheet layout properties such as corner radius. Default is `.default`.
-    public let layout: Layout
-    /// Bottom sheet's shadow. Default is `nil` (no shadow).
-    public let elevation: Elevation?
-    /// Dimmer view color. Default is 'UIColor.black.withAlphaComponent(0.5)'.
-    public let dimmerColor: UIColor?
-    /// Animation duration on bottom sheet. Default is `0.3`.
-    public let animationDuration: TimeInterval
-    /// Animation type during presenting. Default is `curveEaseIn`.
-    public let presentAnimationCurve: UIView.AnimationOptions
-    /// Animation type during dismissing. Default is `curveEaseOut`.
-    public let dismissAnimationCurve: UIView.AnimationOptions
-    /// (Optional) Minimum content view height. Default is `nil`.
-    ///
-    /// Only applicable for resizable sheets. `nil` means to use the content view's intrinsic height as the minimum.
-    public var minimumContentHeight: CGFloat?
-}
-```
+* drag indicator (whether you have one at all or what its size and color are)
+* header (whether you have one at all or what its text color, typography, and optional close button image are)
+* layout (corner radius and minimum, maximum, and ideal sizes for the sheet's contents)
+* drop shadow (if any)
+* dimmer color
+* present animation
+* dismiss animation
 
 **Update or customize appearance**
 
@@ -133,8 +102,12 @@ sheet.appearance.elevation = Elevation(
     color: .black,
     opacity: 0.4
 )
+sheet.appearance.presentAnimation = Animation(
+    duration: 0.4, 
+    curve: .spring(damping: 0.6, velocity: 0.4)
+)
 
-// Present the sheet.
+// Present the sheet with a spring animation.
 present(sheet, animated: true)
 ```
 

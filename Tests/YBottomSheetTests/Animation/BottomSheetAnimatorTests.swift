@@ -17,13 +17,22 @@ final class BottomSheetAnimatorTests: XCTestCase {
         XCTAssertEqual(sut.sheetViewController, sheetController)
     }
 
-    func test_duration() {
+    func test_presentDuration() {
         let main = UIViewController()
         let sheetController = BottomSheetController(title: "Bottom Sheet", childView: UIView())
-        let sut = makeSUT(sheetViewController: sheetController)
+        let sut = makeSUT(sheetViewController: sheetController, direction: .present)
         let context = MockAnimationContext(from: main, to: sheetController)
 
-        XCTAssertEqual(sut.transitionDuration(using: context), sheetController.appearance.animationDuration)
+        XCTAssertEqual(sut.transitionDuration(using: context), sheetController.appearance.presentAnimation.duration)
+    }
+
+    func test_dismissDuration() {
+        let main = UIViewController()
+        let sheetController = BottomSheetController(title: "Bottom Sheet", childView: UIView())
+        let sut = makeSUT(sheetViewController: sheetController, direction: .dismiss)
+        let context = MockAnimationContext(from: main, to: sheetController)
+
+        XCTAssertEqual(sut.transitionDuration(using: context), sheetController.appearance.dismissAnimation.duration)
     }
 
     func test_animate() {
@@ -42,10 +51,11 @@ final class BottomSheetAnimatorTests: XCTestCase {
 private extension BottomSheetAnimatorTests {
     func makeSUT(
         sheetViewController: BottomSheetController,
+        direction: BottomSheetAnimator.Direction = .present,
         file: StaticString = #filePath,
         line: UInt = #line
     ) -> BottomSheetAnimator {
-        let sut = BottomSheetAnimator(sheetViewController: sheetViewController)
+        let sut = BottomSheetAnimator(sheetViewController: sheetViewController, direction: direction)
         trackForMemoryLeak(sut, file: file, line: line)
         return sut
     }

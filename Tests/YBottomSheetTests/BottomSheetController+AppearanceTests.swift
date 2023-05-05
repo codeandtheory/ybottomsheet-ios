@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import YCoreUI
 import YMatterType
 @testable import YBottomSheet
 
@@ -19,9 +20,8 @@ final class BottomSheetControllerAppearanceTests: XCTestCase {
         XCTAssertEqual(sut.layout, .default)
         XCTAssertEqual(sut.elevation, nil)
         XCTAssertEqual(sut.dimmerColor, .black.withAlphaComponent(0.5))
-        XCTAssertEqual(sut.animationDuration, 0.3)
-        XCTAssertEqual(sut.presentAnimationCurve, .curveEaseIn)
-        XCTAssertEqual(sut.dismissAnimationCurve, .curveEaseOut)
+        XCTAssertEqual(sut.presentAnimation, Animation(curve: .regular(options: .curveEaseIn)))
+        XCTAssertEqual(sut.dismissAnimation, Animation(curve: .regular(options: .curveEaseOut)))
         XCTAssertTrue(sut.isDismissAllowed)
     }
 }

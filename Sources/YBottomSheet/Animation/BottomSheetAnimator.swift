@@ -13,6 +13,14 @@ class BottomSheetAnimator: NSObject {
     /// Bottom sheet controller.
     let sheetViewController: BottomSheetController
 
+    enum Direction {
+        case present
+        case dismiss
+    }
+
+    /// Animation direction (present or dismiss)
+    let direction: Direction
+
     /// Override for isReduceMotionEnabled. Default is `nil`.
     ///
     /// For unit testing. When non-`nil` it will be returned instead of
@@ -25,16 +33,24 @@ class BottomSheetAnimator: NSObject {
     }
     
     /// Initializes a bottom sheet animator.
-    /// - Parameter sheetViewController: the sheet being animated.
-    init(sheetViewController: BottomSheetController) {
+    /// - Parameters:
+    ///   - sheetViewController: the sheet being animated.
+    ///   - direction: animation direction
+    init(sheetViewController: BottomSheetController, direction: Direction) {
         self.sheetViewController = sheetViewController
+        self.direction = direction
         super.init()
     }
 }
 
 extension BottomSheetAnimator: UIViewControllerAnimatedTransitioning {
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        sheetViewController.appearance.animationDuration
+        switch direction {
+        case .present:
+            return sheetViewController.appearance.presentAnimation.duration
+        case .dismiss:
+            return sheetViewController.appearance.dismissAnimation.duration
+        }
     }
 
     // Override this method and perform the animations
