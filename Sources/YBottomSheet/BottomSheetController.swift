@@ -161,6 +161,11 @@ public class BottomSheetController: UIViewController {
             onDismiss()
         }
     }
+    
+    /// update views
+    public func updateViews() {
+       updateViewAppearance()
+    }
 }
 
 internal extension BottomSheetController {
