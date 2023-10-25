@@ -38,7 +38,9 @@ class BottomSheetDismissAnimator: BottomSheetAnimator {
             sheet.dimmerView.alpha = 0
         }
 
-        UIView.animate(with: sheet.appearance.dismissAnimation) {
+        UIView.animate(
+            with: sheet.appearance.dismissAnimation
+        ) {
             if self.isReduceMotionEnabled {
                 sheet.sheetView.alpha = 0
             } else {

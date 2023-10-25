@@ -50,7 +50,9 @@ class BottomSheetPresentAnimator: BottomSheetAnimator {
             sheet.dimmerView.alpha = 1
         }
         
-        UIView.animate(with: sheet.appearance.presentAnimation) {
+        UIView.animate(
+            with: sheet.appearance.presentAnimation
+        ) {
             if self.isReduceMotionEnabled {
                 sheet.sheetView.alpha = 1
             } else {

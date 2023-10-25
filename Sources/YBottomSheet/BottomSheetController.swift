@@ -161,6 +161,11 @@ public class BottomSheetController: UIViewController {
             onDismiss()
         }
     }
+    
+    /// update views
+    public func updateViews() {
+       updateViewAppearance()
+    }
 }
 
 internal extension BottomSheetController {
@@ -252,7 +257,16 @@ private extension BottomSheetController {
         let idealHeight = appearance.layout.idealContentHeight ?? childContentSize.height
         if idealHeight > 0.0 {
             if let idealContentHeightAnchor = idealContentHeightAnchor {
-                idealContentHeightAnchor.constant = idealHeight
+                UIView.animate(
+                    withDuration: 0.2,
+                    delay: 0.2,
+                    options: UIView.AnimationOptions.curveEaseIn,
+                    animations: {
+                        idealContentHeightAnchor.constant = idealHeight
+                        self.view.layoutIfNeeded()
+                    },
+                    completion: nil
+                )
             } else {
                 idealContentHeightAnchor = childView.constrain(
                     .heightAnchor,
