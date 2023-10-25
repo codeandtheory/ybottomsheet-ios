@@ -370,6 +370,17 @@ final class BottomSheetControllerTests: XCTestCase {
         XCTAssertTrue(sut.isDismissed)
     }
     
+    func test_updateView() {
+        let sut = SpyBottomSheetController(title: "", childView: MiniView(), appearance: .defaultResizable)
+        sut.view.layoutIfNeeded()
+        
+        XCTAssertFalse(sut.isViewUpdated)
+
+        sut.updateViews()
+        
+        XCTAssertTrue(sut.isViewUpdated)
+    }
+    
     func test_onSwipeDown() {
         let sut = SpyBottomSheetController(title: "", childView: UIView())
         
@@ -524,6 +535,7 @@ final class SpyBottomSheetController: BottomSheetController {
     var onDimmerTapped = false
     var onDragging = false
     var voiceOverFocusSet = false
+    var isViewUpdated = false
     
     override func simulateTapCloseButton() {
         super.simulateTapCloseButton()
@@ -554,6 +566,11 @@ final class SpyBottomSheetController: BottomSheetController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         voiceOverFocusSet = true
+    }
+    
+    override func updateViews() {
+        super.updateViews()
+        isViewUpdated = true
     }
 
     @discardableResult
